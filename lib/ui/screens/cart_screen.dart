@@ -185,21 +185,13 @@ class CartScreenState extends State<CartScreen> {
                                     onTap: () async {
                                       SharedPreferences pref = await SharedPreferences
                                           .getInstance();
-                                      if (pref.getString('user') !=
-                                          null) {
-                                        Get.toNamed(
-                                            MyRouter.checkoutScreen,
+                                      if (pref.getString('user') != null) {
+                                        Get.toNamed(MyRouter.checkoutScreen,
                                             arguments: [
-                                              _cartController
-                                                  .model
-                                                  .value
-                                                  .data!
-                                                  .cartmeta
-                                                  .currencySymbol,
+                                              _cartController.model.value.data!.cartmeta.currencySymbol,
                                             ]);
                                       } else {
-                                        Get.toNamed(
-                                            MyRouter.logInScreen);
+                                        Get.toNamed(MyRouter.logInScreen);
                                       }
                                     },
                                     mainGradient: AppTheme

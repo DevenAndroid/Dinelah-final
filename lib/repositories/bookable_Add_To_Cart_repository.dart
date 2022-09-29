@@ -28,6 +28,8 @@ Future<ModelResponseCommon> getBookableAddToCartData(
   startTime,
   endTime,
   resourcesId,
+    monthsFieldDuration,
+    dateYearMonth
 ) async {
   var map = <String, dynamic>{};
   SharedPreferences pref = await SharedPreferences.getInstance();
@@ -53,6 +55,9 @@ Future<ModelResponseCommon> getBookableAddToCartData(
   map['start_time'] = startTime;
   map['end_time'] = endTime;
   map['resource_id'] = resourcesId.toString().replaceAll("#", '').split('-')[0];
+  map['months_field_duration'] = monthsFieldDuration;
+  map['date_yearmonth'] = dateYearMonth;
+
 
   final headers = {
     HttpHeaders.contentTypeHeader: 'application/json',

@@ -5,6 +5,8 @@ import 'package:dinelah/repositories/bookable_Add_To_Cart_repository.dart';
 import 'package:dinelah/res/theme/theme.dart';
 import 'package:dinelah/routers/my_router.dart';
 import 'package:dinelah/ui/widget/common_button.dart';
+import 'package:dinelah/ui/widget/common_text_field.dart';
+import 'package:dinelah/ui/widget/common_text_field_form.dart';
 import 'package:dinelah/ui/widget/common_widget.dart';
 import 'package:dinelah/utils/ApiConstant.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,14 +22,15 @@ class BookingProductWithCalender extends StatefulWidget {
   const BookingProductWithCalender({Key? key}) : super(key: key);
 
   @override
-  BookingProductWithCalenderState createState() =>
-      BookingProductWithCalenderState();
+  BookingProductWithCalenderState createState() => BookingProductWithCalenderState();
 }
 
-class BookingProductWithCalenderState
-    extends State<BookingProductWithCalender> {
+class BookingProductWithCalenderState extends State<BookingProductWithCalender> {
   var mList = List<TimeSlots>.empty(growable: true);
   var mListTime = List<String>.empty(growable: true);
+
+  TextEditingController durationController = TextEditingController();
+  var dateYearMonth;
 
   CalendarFormat format = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
@@ -140,6 +143,16 @@ class BookingProductWithCalenderState
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text(
+                          "${controller.model.value.data!.durationType}::${controller.model.value.data!.durationUnit}",
+                          style: const TextStyle(
+                              color: AppTheme.colorWhite,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
                           controller.model.value.data!.description.toString(),
                           style: const TextStyle(
                               height: 1.8, color: Colors.white, fontSize: 20),
@@ -156,7 +169,8 @@ class BookingProductWithCalenderState
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TableCalendar(
+                            controller.model.value.data!.durationType!="customer" || controller.model.value.data!.durationUnit!="month"
+                                ? TableCalendar(
                               firstDay: DateTime(2010),
                               lastDay: DateTime(2030),
                               focusedDay: DateTime.now(),
@@ -221,16 +235,75 @@ class BookingProductWithCalenderState
                                     color: AppTheme.primaryColor,
                                     shape: BoxShape.circle),
                               ),
+                            )
+                                : Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 12),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text('Duration:'),
+                                  addHeight(4.0),
+                                  CommonTextFieldWidgetForm(
+                                    hint: 'Enter Month(s)',
+                                    controller: durationController,
+                                  ),
+                                  addHeight(20.0),
+                                  GridView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                    NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 4,
+                                      childAspectRatio: 2.0,
+                                      mainAxisSpacing: 8.0,
+                                      crossAxisSpacing: 10.0,
+                                    ),
+                                    itemBuilder: (_, index) {
+                                      // return timeSlot(mList, index);
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            selectedtime = index;
+                                            dateYearMonth= "${controller.model.value.data!.availableDates![index].value}";
+                                            print("object:::$dateYearMonth");
+                                            // selectedtim = mList[index].time.toString();
+                                          });
+                                        },
+                                        child: Container(
+                                            decoration: BoxDecoration(
+                                              color: selectedtime != index
+                                                  ? Colors.grey.shade200
+                                                  : Colors.red,
+                                              borderRadius: const BorderRadius.all(Radius.circular(50)),
+                                            ),
+                                            child: Center(
+                                                child: Text(
+                                                  controller.model.value.data!.availableDates![index].valueText.toString(),
+                                                  style: TextStyle(
+                                                      color: selectedtime != index
+                                                          ? AppTheme.textColorDarkBLue
+                                                          : Colors.white,
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.bold),
+                                                ))),
+                                      );
+                                    },
+                                    // itemCount: mList.length,
+                                    itemCount: controller
+                                        .model.value.data!.availableDates!.length,
+                                  ),
+                                ],
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16.0, vertical: 12),
                               child: Container(
                                 child:
-                                    controller.model.value.data!.durationType ==
-                                            'fixed'
-                                        ?
-                                    SizedBox(
+                                    controller.model.value.data!.durationType == 'fixed'
+                                        ? SizedBox(
                                             // height: MediaQuery.of(context)
                                             //         .size
                                             //         .height *
@@ -264,10 +337,10 @@ class BookingProductWithCalenderState
                                                             .newprimaryColor),
                                                   )),
                                           )
+                                        : controller.model.value.data!.durationUnit=="month"
+                                        ? const SizedBox.shrink()
                                         : SizedBox(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
+                                            width: MediaQuery.of(context).size.width,
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -446,19 +519,11 @@ class BookingProductWithCalenderState
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0,
                               ),
-                              child:
-            controller
-                .model.value.data!.personTypeData!.isEmpty?
-
-            SizedBox.shrink():
-            controller
-                .model.value.data!.personTypeData!.length == 1
-                ?
-            personData(
-            controller
-                .model.value.data!.personTypeData!, 0)
-            :
-                              ListView.builder(
+                              child: controller.model.value.data!.personTypeData!.isEmpty?
+                              const SizedBox.shrink():
+                              controller.model.value.data!.personTypeData!.length == 1
+                                  ? personData(controller.model.value.data!.personTypeData!, 0)
+                                  : ListView.builder(
                                   shrinkWrap: true,
                                   itemCount: controller
                                       .model.value.data!.personTypeData!.length,
@@ -556,10 +621,7 @@ class BookingProductWithCalenderState
                                     debugPrint(
                                         ":::::::::endTimeSlug:::=>${controller.dropdownEndTimeValue}");
 
-                                    if (controller.model.value.data!
-                                                .durationType ==
-                                            'fixed' &&
-                                        selectedtim == null) {
+                                    if (controller.model.value.data!.durationType == 'fixed' && selectedtim == null) {
                                       getAlertDialog('Add Cart',
                                           'Please check your time slot.\nMight be you don\'t have time slot for selected date',
                                           () {
@@ -574,24 +636,20 @@ class BookingProductWithCalenderState
                                               monthSlug.toString(),
                                               daySlug.toString(),
                                               selectedtim.toString(),
-                                              controller.model.value.data!
-                                                      .personTypeData!.isEmpty
+                                              controller.model.value.data!.personTypeData!.isEmpty
                                                   ? '0'
-                                                  : controller.model.value.data!
-                                                      .personTypeData![0].id
-                                                      .toString(),
+                                                  : controller.model.value.data!.personTypeData![0].id.toString(),
                                               selectedChild.toString(),
-                                              controller.model.value.data!
-                                                      .personTypeData!.isEmpty
-                                                  ? '0'
-                                                  : controller.model.value.data!
-                                                      .personTypeData![1].id
-                                                      .toString(),
+                                              controller.model.value.data!.personTypeData!.length < 2
+                                                  ? 0
+                                                  : controller.model.value.data!.personTypeData![1].id.toString(),
                                               selectedAdult.toString(),
                                               startTimeSlug.toString(),
-                                              controller.dropdownEndTimeValue
-                                                  .toString(),
-                                              controller.resourcesValue.value)
+                                              controller.dropdownEndTimeValue.toString(),
+                                              controller.resourcesValue.value,
+                                          durationController.text==null?"":durationController.text.toString(),
+                                          dateYearMonth,
+                                      )
                                           .then((value) {
                                         if (value.status) {
                                           final bottomNavController =

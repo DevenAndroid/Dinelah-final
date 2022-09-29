@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../routers/my_router.dart';
 
@@ -268,6 +269,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       Get.back();
                       widget.onItemTapped(1);
                     }),
+                const Divider(
+                  height: 1,
+                ),
+                _drawerTile(
+                    active: true,
+                    title: Strings.faq,
+                    icon: const Icon(
+                      Icons.question_mark_outlined,
+                      size: 22,
+                      color: AppTheme.textColorDarkBLue,
+                    ),
+                    onTap: () async {
+                      Get.back();
+                      launch("https://dinelah.com/faq/");
+                    }),
                 !isLogin ? const SizedBox.shrink() : const Divider(),
                 !isLogin
                     ? const SizedBox.shrink()
@@ -282,8 +298,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         onTap: () async {
                           _getClientInformation();
                           Get.back();
-                          SharedPreferences preferences =
-                              await SharedPreferences.getInstance();
+
+                          SharedPreferences preferences = await SharedPreferences.getInstance();
                           await preferences.clear();
                           Get.offAllNamed(MyRouter.logInScreen,
                               arguments: ['mainScreen']);

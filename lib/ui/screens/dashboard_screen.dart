@@ -114,13 +114,11 @@ class DashBoardScreenState extends State<DashBoardScreen> {
                         SizedBox(
                           height: screenSize.height * 0.05,
                           child: ListView.builder(
-                              itemCount: _controller
-                                  .model.value.data!.category.categories.length,
+                              itemCount: _controller.model.value.data!.category.categories.length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
                                 return categoryList(
-                                    _controller
-                                        .model.value.data!.category.categories,
+                                    _controller.model.value.data!.category.categories,
                                     index);
                               }),
                         ),

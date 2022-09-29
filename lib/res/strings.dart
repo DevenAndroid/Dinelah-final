@@ -8,6 +8,7 @@ class Strings {
   static var checkout = 'Checkout';
   static var orderDetails = 'Order details';
   static var myCart = 'My Cart';
+  static var faq = 'FAQ';
   static var produtcDetail = 'Product Detail';
 
   //'No Product found'

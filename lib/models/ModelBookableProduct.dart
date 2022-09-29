@@ -131,6 +131,7 @@ class Data {
         availableDates!.add(AvailableDates.fromJson(v));
       });
     }
+
     if (json['resource_list'] != null) {
       resourceList = <ResourceList>[];
       json['resource_list'].forEach((v) {
@@ -259,6 +260,8 @@ class AvailableDates {
   String? date;
   bool? isAvailable;
   String? message;
+  String? value;
+  String? valueText;
   List<TimeSlots>? timeSlots;
 
   AvailableDates({this.date, this.isAvailable, this.message, this.timeSlots});
@@ -267,6 +270,8 @@ class AvailableDates {
     date = json['date'];
     isAvailable = json['is_available'];
     message = json['message'];
+    value = json['value'];
+    valueText = json['value_text'];
     if (json['time_slots'] != null) {
       timeSlots = <TimeSlots>[];
       json['time_slots'].forEach((v) {
@@ -280,6 +285,8 @@ class AvailableDates {
     data['date'] = date;
     data['is_available'] = isAvailable;
     data['message'] = message;
+    data['value'] = value;
+    data['value_text'] = valueText;
     if (timeSlots != null) {
       data['time_slots'] = timeSlots!.map((v) => v.toJson()).toList();
     }

@@ -23,7 +23,7 @@ Future<ModelBookableProductData> getBookableProducts(productId) async {
   }
   map['product_id'] = productId;
 
-  print ('REQUEST PARAM :: '+map.toString());
+  print ('REQUEST PARAM Bookable product:: $map');
   final headers = {
     HttpHeaders.contentTypeHeader: 'application/json',
     HttpHeaders.acceptHeader: 'application/json',

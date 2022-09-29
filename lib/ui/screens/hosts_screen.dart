@@ -254,13 +254,7 @@ class HostsScreenState extends State<HostsScreen> {
                                                                     .time.isEmpty?
                                                                     Text('No time added'):
                                                                 dataTableWidget(
-                                                                  _controller
-                                                                      .model
-                                                                      .value
-                                                                      .data!
-                                                                      .storeInfo
-                                                                      .storeOpenClose
-                                                                      .time,
+                                                                  _controller.model.value.data!.storeInfo.storeOpenClose.time,
                                                                   context
                                                               ),
                                                                 addHeight(10)

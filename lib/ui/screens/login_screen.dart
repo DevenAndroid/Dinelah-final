@@ -273,11 +273,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       text: Strings.buttonLogin,
                                       textColor: Colors.white,
                                       onTap: () async {
-                                        var fcmToken = await FirebaseMessaging
-                                            .instance
-                                            .getToken();
-                                        if (loginFormKey.currentState!
-                                            .validate()) {
+                                        var fcmToken = await FirebaseMessaging.instance.getToken();
+                                        if (loginFormKey.currentState!.validate()) {
                                           createLogin(
                                                   userNameController.text,
                                                   passwordController.text,
@@ -290,20 +287,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                               showToast(value.message);
                                               // Helpers.createSnackBar(context,
                                               //     value.message.toString());
-                                              SharedPreferences pref =
-                                                  await SharedPreferences
-                                                      .getInstance();
-                                              pref.setString('user',
-                                                  jsonEncode(value.data));
+                                              SharedPreferences pref = await SharedPreferences.getInstance();
+                                              pref.setString('user', jsonEncode(value.data));
 
                                               controller.getUser();
 
                                               if (Get.arguments != null) {
-                                                Get.offAndToNamed(
-                                                    MyRouter.customBottomBar);
-                                              } else {
-                                                Get.back();
-                                              }
+                                                Get.offAndToNamed(MyRouter.customBottomBar);
+                                                } else {
+                                                  Get.back();
+                                                }
                                             } else {
                                               Get.defaultDialog(
                                                   title: 'Log In',
@@ -447,8 +440,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<UserCredential> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
     print ('GOOGLE USER :: '+googleUser.toString());
     final credential = GoogleAuthProvider.credential(
       idToken: googleUser.id.toString(),

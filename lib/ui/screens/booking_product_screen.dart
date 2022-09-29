@@ -243,8 +243,7 @@ class BookingProductScreenState extends State<BookingProductScreen> {
                           text: 'BOOK NOW',
                           onTap: () {
                             Get.toNamed(
-                                MyRouter
-                                    .bookingProductScreenWithCalender,
+                                MyRouter.bookingProductScreenWithCalender,
                                 arguments: [
                                   model.id
                                 ]);

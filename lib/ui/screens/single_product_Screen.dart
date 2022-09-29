@@ -11,6 +11,7 @@ import 'package:dinelah/utils/ApiConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../res/app_assets.dart';
 
@@ -215,22 +216,26 @@ class SingleProductScreenState extends State<SingleProductScreen> {
                             addWidth(10),
                             Row(
                               children: [
-                                RatingBar.builder(
-                                  initialRating: double.parse(model.averageRating
-                                      .toString()),
-                                  minRating: 0,
-                                  itemSize: 18,
-                                  ignoreGestures: true,
-                                  direction: Axis.horizontal,
-                                  itemCount: 5,
-                                  itemBuilder: (context, _) =>
-                                  const Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
-                                  onRatingUpdate: (rating) {
-                                    debugPrint(rating.toString());
+                                GestureDetector(
+                                  onTap: (){
+                                    launch(model.permalink.toString());
                                   },
+                                  child: RatingBar.builder(
+                                    initialRating: double.parse(model.averageRating.toString()),
+                                    minRating: 0,
+                                    itemSize: 18,
+                                    ignoreGestures: true,
+                                    direction: Axis.horizontal,
+                                    itemCount: 5,
+                                    itemBuilder: (context, _) =>
+                                    const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      debugPrint(rating.toString());
+                                    },
+                                  ),
                                 ),
                                 Text('(${(model.ratingCount
                                     .toString())})',
