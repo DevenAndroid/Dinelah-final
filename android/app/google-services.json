@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "962094105233",
+    "firebase_url": "https://dinelah-fae97-default-rtdb.firebaseio.com",
+    "project_id": "dinelah-fae97",
+    "storage_bucket": "dinelah-fae97.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962094105233:android:42417678d9287af8e93530",
+        "android_client_info": {
+          "package_name": "com.dinelah.dinelah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962094105233-97pscvl4phkja2r7h9rdnt76qnnuas8o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dinelah.dinelah",
+            "certificate_hash": "a6a68143aa190be49b46aaa454206c7123ff78c3"
+          }
+        },
+        {
+          "client_id": "962094105233-plgqpblcgaipdrivh5kjbeaavttuafeu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAjlemWzDiNsXUIwFV9TCqSV4ORBMpt-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962094105233-plgqpblcgaipdrivh5kjbeaavttuafeu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "962094105233-k9c2rsrosacvm1g3hpko145ehfgkalab.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dinelahdriver"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962094105233:android:49b26d93dd925f31e93530",
+        "android_client_info": {
+          "package_name": "com.dinelahVendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962094105233-plgqpblcgaipdrivh5kjbeaavttuafeu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAjlemWzDiNsXUIwFV9TCqSV4ORBMpt-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962094105233-plgqpblcgaipdrivh5kjbeaavttuafeu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "962094105233-k9c2rsrosacvm1g3hpko145ehfgkalab.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dinelahdriver"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962094105233:android:f3b11ccd1743d76fe93530",
+        "android_client_info": {
+          "package_name": "com.dinelahdriver.dinelah_driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962094105233-plgqpblcgaipdrivh5kjbeaavttuafeu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAjlemWzDiNsXUIwFV9TCqSV4ORBMpt-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962094105233-plgqpblcgaipdrivh5kjbeaavttuafeu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "962094105233-k9c2rsrosacvm1g3hpko145ehfgkalab.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dinelahdriver"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

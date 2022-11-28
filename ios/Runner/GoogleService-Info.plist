@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>962094105233-mpaddfr9p7kqpp96q7f5aruh487gu50s.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.962094105233-mpaddfr9p7kqpp96q7f5aruh487gu50s</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>962094105233-97pscvl4phkja2r7h9rdnt76qnnuas8o.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDl2Mh4iLy_Z3s3edAxBKew0bIKL8tjJHo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>962094105233</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dinelah.dinelah</string>
+	<key>PROJECT_ID</key>
+	<string>dinelah-fae97</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dinelah-fae97.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:962094105233:ios:0614aa07a5ab95e0e93530</string>
+	<key>DATABASE_URL</key>
+	<string>https://dinelah-fae97-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
