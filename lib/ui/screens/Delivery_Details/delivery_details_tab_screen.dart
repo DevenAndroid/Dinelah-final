@@ -93,7 +93,7 @@ class _DeliveryDetailsState extends State<DeliveryDetails> {
                   addHeight(20),
                   _getPaymentDetails(
                       'Delivery fee',
-                      orderData!.currencySymbol.toString() +
+                      orderData.currencySymbol.toString() +
                           orderData.shippingTotal.toString()),
                   addHeight(24),
                   _getPaymentDetails(

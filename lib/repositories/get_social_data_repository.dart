@@ -38,7 +38,7 @@ try {
       body: jsonEncode(map), headers: headers);
 
   print('PARAM :: ${jsonEncode(map)}');
-  print('RESPONSE :: ${json.decode(response.body)}');
+  print('RESPONSE :: ${response.body}');
   Helpers.hideLoader(loader);
 
   if (response.statusCode == 200) {

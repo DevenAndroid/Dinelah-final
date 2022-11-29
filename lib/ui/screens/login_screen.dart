@@ -83,7 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         });
       });
-    } else {
+    }
+    else {
       String? token = await FirebaseMessaging.instance.getToken();
       await FirebaseAuth.instance
           .signInWithProvider(appleProvider)
@@ -119,8 +120,6 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     }
   }
-
-  // Map<String, dynamic>? _userData;
 
   @override
   void initState() {
@@ -590,7 +589,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final value = await FirebaseAuth.instance.signInWithCredential(credential);
     log("Firebase response.... ${value.toString()}");
-    getSocialLogin(context, value.credential!.accessToken, "google",deviceId,
+    getSocialLogin(context, value.user!.uid.toString(), "google",deviceId,
         value.user!.email.toString(),
         await FirebaseMessaging.instance.getToken()).then((value1) async {
       showToast(value1.message);
@@ -624,7 +623,7 @@ class _LoginScreenState extends State<LoginScreen> {
         oAuthCredential).catchError((e) {
       showToast(e.toString());
     }).then((value) async {
-      getSocialLogin(context, value.credential!.accessToken, "facebook", deviceId,
+      getSocialLogin(context, value.user!.uid.toString(), "facebook", deviceId,
           value.additionalUserInfo!.profile!["email"],
           await FirebaseMessaging.instance.getToken()).then((value1) async {
       showToast(value1.message);
