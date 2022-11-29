@@ -95,6 +95,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "962094105233-c8afpn3v18irhibi1ap44i14sfn5op9p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dinelahdriver.dinelah_driver",
+            "certificate_hash": "816e508e771bf4ea597323645a662d7dc4ac5f1f"
+          }
+        },
+        {
+          "client_id": "962094105233-gov7799mkvmt58rd6lbkbnhqhjtvbdp1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dinelahdriver.dinelah_driver",
+            "certificate_hash": "205c7d0d77c9701d6bf996964859863de86a5c0e"
+          }
+        },
+        {
           "client_id": "962094105233-plgqpblcgaipdrivh5kjbeaavttuafeu.apps.googleusercontent.com",
           "client_type": 3
         }

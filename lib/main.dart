@@ -29,14 +29,14 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: 'AIzaSyCAjlemWzDiNsXUIwFV9TCqSV4ORBMpt-s',
-      // apiKey: 'AIzaSyDe8CX9WYGxR_IK4J2zn0QiainTgAGAy0c',
-      // appId: '1:580087456375:android:1e0eae7ae2ad95e6de9c72',
-      appId: '1:962094105233:android:f3b11ccd1743d76fe93530',
-      messagingSenderId: '962094105233',
-      projectId: 'dinelah-fae97',
-    ),
+    // options: const FirebaseOptions(
+    //   apiKey: 'AIzaSyCAjlemWzDiNsXUIwFV9TCqSV4ORBMpt-s',
+    //   // apiKey: 'AIzaSyDe8CX9WYGxR_IK4J2zn0QiainTgAGAy0c',
+    //   // appId: '1:580087456375:android:1e0eae7ae2ad95e6de9c72',
+    //   appId: '1:962094105233:android:f3b11ccd1743d76fe93530',
+    //   messagingSenderId: '962094105233',
+    //   projectId: 'dinelah-fae97',
+    // ),
   );
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(

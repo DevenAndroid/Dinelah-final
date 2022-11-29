@@ -1,10 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:client_information/client_information.dart';
-import 'package:dinelah/helper/Helpers.dart';
 import 'package:dinelah/repositories/get_social_data_repository.dart';
 import 'package:dinelah/repositories/user_login_repository.dart';
 import 'package:dinelah/res/app_assets.dart';
@@ -22,7 +21,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -56,27 +54,37 @@ class _LoginScreenState extends State<LoginScreen> {
         print("Apple authResult:: uid=:"+value.user!.uid.toString());
         print("Apple authResult:: email=:"+value.user!.email.toString());
 
+        String? token = await FirebaseMessaging.instance.getToken();
+
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('socialLoginId', value.user!.uid.toString());
         SharedPreferences prefs = await SharedPreferences.getInstance();
         var deviceId = prefs.getString('deviceId');
-        getSocialLogin(context,value.user!.uid.toString(), "apple",deviceId)
-            .then((value1) async {
+        getSocialLogin(
+            context,
+            value.user!.uid.toString(),
+            "apple",
+            deviceId,
+          value.user!.email.toString(),
+            token
+        ).then((value1) async {
+          showToast(value1.message);
           if (value1.status) {
             SharedPreferences pref = await SharedPreferences.getInstance();
             pref.setString('user', jsonEncode(value1.data));
             Get.offAndToNamed(MyRouter.customBottomBar);
           } else {
-            Get.offAndToNamed(MyRouter.signUpScreen, arguments: [
-              value.user!.uid.toString(),
-              value.user!.email.toString(),
-              "",
-              'apple',
-            ]);
+            // Get.offAndToNamed(MyRouter.signUpScreen, arguments: [
+            //   value.user!.uid.toString(),
+            //   value.user!.email.toString(),
+            //   "",
+            //   'apple',
+            // ]);
           }
         });
       });
     } else {
+      String? token = await FirebaseMessaging.instance.getToken();
       await FirebaseAuth.instance
           .signInWithProvider(appleProvider)
           .then((value) async {
@@ -88,8 +96,11 @@ class _LoginScreenState extends State<LoginScreen> {
         pref.setString('socialLoginId', value.user!.uid.toString());
         SharedPreferences prefs = await SharedPreferences.getInstance();
         var deviceId = prefs.getString('deviceId');
-        getSocialLogin(context,value.user!.uid.toString(), "apple",deviceId)
-            .then((value1) async {
+        getSocialLogin(context,value.user!.uid.toString(), "apple",deviceId,
+            value.user!.email.toString(),
+            token
+        ).then((value1) async {
+          showToast(value1.message);
           if (value1.status) {
             // showToast(value.message.toString());
             SharedPreferences pref = await SharedPreferences.getInstance();
@@ -97,12 +108,12 @@ class _LoginScreenState extends State<LoginScreen> {
             Get.offAndToNamed(MyRouter.customBottomBar);
           } else {
             // showToast(value.message.toString());
-            Get.offAndToNamed(MyRouter.signUpScreen, arguments: [
-              value.user!.uid.toString(),
-              value.user!.email.toString(),
-              "",
-              'apple',
-            ]);
+            // Get.offAndToNamed(MyRouter.signUpScreen, arguments: [
+            //   value.user!.uid.toString(),
+            //   value.user!.email.toString(),
+            //   "",
+            //   'apple',
+            // ]);
           }
         });
       });
@@ -561,12 +572,12 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<UserCredential> signInWithGoogle() async {
+  signInWithGoogle() async {
+    await GoogleSignIn().signOut();
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
-    print ('GOOGLE USER :: '+googleUser.toString());
     final credential = GoogleAuthProvider.credential(
-      idToken: googleUser.id.toString(),
+      idToken: googleAuth.idToken,
       accessToken: googleAuth.accessToken,
     );
 
@@ -576,69 +587,58 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var deviceId = prefs.getString('deviceId');
 
-    getSocialLogin(context, googleUser.id.toString(), "google",deviceId).then((value) async {
-      if (value.status) {
+
+  final value = await FirebaseAuth.instance.signInWithCredential(credential);
+    log("Firebase response.... ${value.toString()}");
+    getSocialLogin(context, value.credential!.accessToken, "google",deviceId,
+        value.user!.email.toString(),
+        await FirebaseMessaging.instance.getToken()).then((value1) async {
+      showToast(value1.message);
+      if (value1.status) {
         // showToast(value.message.toString());
         SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('user', jsonEncode(value.data));
+        pref.setString('user', jsonEncode(value1.data));
         Get.offAndToNamed(MyRouter.customBottomBar);
-      } else {
-        // showToast(value.message.toString());
-        Get.offAndToNamed(MyRouter.signUpScreen, arguments: [
-          googleUser.id.toString(),
-          googleUser.email.toString(),
-          googleUser.displayName.toString(),
-          'google'
-        ]);
       }
-      return null;
+      // else {
+      //   // showToast(value.message.toString());
+      //   Get.offAndToNamed(MyRouter.signUpScreen, arguments: [
+      //     googleUser.id.toString(),
+      //     googleUser.email.toString(),
+      //     googleUser.displayName.toString(),
+      //     'google'
+      //   ]);
+      // }
     });
-    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  Future<UserCredential> signInFaceBook() async {
-    // User? firebaseUser;
+  signInFaceBook() async {
+    final LoginResult loginResult = await FacebookAuth.instance.login(
+        permissions: ["public_profile", "email"]);
 
-    final LoginResult loginResult =
-        await FacebookAuth.instance.login(permissions: ['email']);
-
-    if (loginResult == LoginStatus.success) {
-      // final userData = await FacebookAuth.instance.getUserData();
-
-      // _userData = userData;
-    } else {
-      // print(loginResult.message);
-    }
-
-    final OAuthCredential oAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
-    final userData = await FacebookAuth.instance.getUserData();
-
-    print("acess token is  ::::::::::$userData");
+    final OAuthCredential oAuthCredential = FacebookAuthProvider.credential(
+        loginResult.accessToken!.token);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var deviceId = prefs.getString('deviceId');
-
-
-    getSocialLogin(context, userData['id'].toString(), "facebook",deviceId)
-        .then((value) async {
-      if (value.status) {
-       // showToast(value.message.toString());
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString('user', jsonEncode(value.data));
-        Get.offAndToNamed(MyRouter.customBottomBar);
-      } else {
-        // showToast(value.message.toString());
-        Get.offAndToNamed(MyRouter.signUpScreen, arguments: [
-          userData['id'].toString(),
-          userData['email'].toString(),
-          userData['name'].toString(),
-          'facebook'
-        ]);
+    final value = await FirebaseAuth.instance.signInWithCredential(
+        oAuthCredential).catchError((e) {
+      showToast(e.toString());
+    }).then((value) async {
+      getSocialLogin(context, value.credential!.accessToken, "facebook", deviceId,
+          value.additionalUserInfo!.profile!["email"],
+          await FirebaseMessaging.instance.getToken()).then((value1) async {
+      showToast(value1.message);
+      if (value1.status) {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setString('user', jsonEncode(value1.data));
+      Get.offAndToNamed(MyRouter.customBottomBar);
       }
-      return null;
+      });
     });
-    return FirebaseAuth.instance.signInWithCredential(oAuthCredential);
+    log("Firebase response.... ${value.toString()}");
+    // if (value.user!.email != null) {
+
+  // }
   }
 
   //  signInApple() async {
