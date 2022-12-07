@@ -42,13 +42,13 @@
 	<key>NSContactsUsageDescription</key>
 	<string>This app require permission to access details.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow this to access your current location.</string>
+	<string>Allow this to access your current location to find nearby stores.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow this to access your location</string>
+	<string>Allow this to access your location to find nearby stores.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow this to access your location</string>
+	<string>Allow this to access your location to find nearby stores.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow this to access your gallery images to update your profile picture.</string>
+	<string>Allow this to access your library images to update your profile picture.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dinelah/res/theme/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -49,8 +50,13 @@ class Helpers {
         top: 0,
         left: 0,
         child: Material(
-          color:  AppTheme.primaryColor.withOpacity(0.2),
-          child: CircularLoadingWidget(height: 200),
+          color:  AppTheme.primaryColor.withOpacity(0.05),
+          elevation: 0,
+          child: const CupertinoActivityIndicator(
+            radius: 30,
+            animating: true,
+            color: AppTheme.primaryColor
+          ),
         ),
       );
     });
