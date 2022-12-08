@@ -31,6 +31,87 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String? userImage;
   RxBool isLoggedIn = false.obs;
 
+  showDeleteDialogue() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: const EdgeInsets.symmetric(horizontal: 18),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(14)),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Are you sure your want to delete your account.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                            onPressed: () {
+                              deleteUserAccountData(context)
+                                  .then((value) async {
+                                if (value.status == true) {
+                                  _getClientInformation();
+                                  Get.back();
+                                  SharedPreferences preferences =
+                                      await SharedPreferences.getInstance();
+                                  await preferences.clear();
+                                  showToast(value.message);
+                                  Get.offAllNamed(MyRouter.logInScreen,
+                                      arguments: ['mainScreen']);
+                                } else {
+                                  showToast(value.message);
+                                }
+                                return null;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red),
+                            child: const Text(
+                              "Delete",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            )),
+                      ),
+                      const SizedBox(
+                        width: 18,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: const Text(
+                              "Cancel",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            )),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   ClientInformation? _clientInfo;
   SharedPreferences? pref;
   bool isLogin = true;
@@ -287,33 +368,23 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       launch("https://dinelah.com/faq/");
                     }),
                 !isLogin ? const SizedBox.shrink() : const Divider(),
-                !isLogin ? const SizedBox.shrink() : _drawerTile(
-                    active: true,
-                    title: "Delete Account",
-                    icon: const Icon(
-                      Icons.delete_outline,
-                      size: 22,
-                      color: AppTheme.textColorDarkBLue,
-                    ),
-                    onTap: () async {
-                      deleteUserAccountData(context).then((value) async {
-                        if(value.status==true){
-                          _getClientInformation();
-                          Get.back();
-                          SharedPreferences preferences = await SharedPreferences.getInstance();
-                          await preferences.clear();
-                          showToast(value.message);
-                          Get.offAllNamed(MyRouter.logInScreen, arguments: ['mainScreen']);
-                        }else{
-                          showToast(value.message);
-                        }
-                        return null;
-                      });
-                    }),
-
-
+                !isLogin
+                    ? const SizedBox.shrink()
+                    : _drawerTile(
+                        active: true,
+                        title: "Delete Account",
+                        icon: const Icon(
+                          Icons.delete_outline,
+                          size: 22,
+                          color: AppTheme.textColorDarkBLue,
+                        ),
+                        onTap: () async {
+                          showDeleteDialogue();
+                        }),
                 !isLogin ? const SizedBox.shrink() : const Divider(),
-                !isLogin ? const SizedBox.shrink() : _drawerTile(
+                !isLogin
+                    ? const SizedBox.shrink()
+                    : _drawerTile(
                         active: true,
                         title: Strings.logOut,
                         icon: const Icon(
@@ -325,7 +396,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           _getClientInformation();
                           Get.back();
 
-                          SharedPreferences preferences = await SharedPreferences.getInstance();
+                          SharedPreferences preferences =
+                              await SharedPreferences.getInstance();
                           await preferences.clear();
                           Get.offAllNamed(MyRouter.logInScreen,
                               arguments: ['mainScreen']);

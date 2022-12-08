@@ -179,342 +179,337 @@ class _LoginScreenState extends State<LoginScreen> {
                 bottom: 36,
                 child: Stack(
                   children: [
-                    SizedBox(
-                      width: screenSize.width,
-                      child: Form(
-                        key: loginFormKey,
-                        child: Column(
-                          children: [
-                            Card(
-                              elevation: 5,
-                              color: Colors.white.withOpacity(0.88),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              margin: const EdgeInsets.fromLTRB(18, 56, 18, 24),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  children: [
-                                    addHeight(screenSize.height * .04),
-                                    Text(
-                                      Strings.buttonLogin,
-                                      style: const TextStyle(
-                                          color: AppTheme.textColorDarkBLue,
-                                          fontWeight: FontWeight.w900,
-                                          fontSize: 28),
-                                    ),
-                                    addHeight(8),
-                                    labelText(Strings.loginToYourAccount),
-                                    addHeight(24),
-                                    CommonTextFieldWidget(
-                                      hint: 'Email',
-                                      controller: userNameController,
-                                      icon: Icons.email_outlined,
-                                      bgColor: AppTheme.etBgColor,
-                                    ),
-                                    addHeight(12),
-                                    Obx(() => IntrinsicHeight(
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Expanded(
-                                                child: TextFormField(
-                                                  controller:
-                                                      passwordController,
-                                                  obscureText:
-                                                      isPasswordShow.value,
-                                                  autofillHints: const [
-                                                    AutofillHints.password
-                                                  ],
-                                                  validator: (value) {
-                                                    if (isPassword!) {
-                                                      if (value!
-                                                          .trim()
-                                                          .isEmpty) {
-                                                        return 'Please enter password';
-                                                      } else if (value.length <
-                                                          4) {
-                                                        return 'Password must be greater then 6';
-                                                      } else if (value.length >
-                                                          100) {
-                                                        return 'Password must be less then 100';
+                    Theme(
+                      data: ThemeData(
+                        primaryColor: Colors.red,
+                        primarySwatch: Colors.red
+                      ),
+                      child: SizedBox(
+                        width: screenSize.width,
+                        child: Form(
+                          key: loginFormKey,
+                          child: Column(
+                            children: [
+                              Card(
+                                elevation: 5,
+                                color: Colors.white.withOpacity(0.88),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                margin: const EdgeInsets.fromLTRB(18, 56, 18, 24),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    children: [
+                                      addHeight(screenSize.height * .04),
+                                      Text(
+                                        Strings.buttonLogin,
+                                        style: const TextStyle(
+                                            color: AppTheme.textColorDarkBLue,
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 28),
+                                      ),
+                                      addHeight(8),
+                                      labelText(Strings.loginToYourAccount),
+                                      addHeight(24),
+                                      CommonTextFieldWidget(
+                                        hint: 'Email',
+                                        controller: userNameController,
+                                        icon: Icons.email_outlined,
+                                        bgColor: AppTheme.etBgColor,
+                                      ),
+                                      addHeight(12),
+                                      Obx(() =>
+                                          IntrinsicHeight(
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Expanded(
+                                                  child: TextFormField(
+                                                    controller:
+                                                        passwordController,
+                                                    obscureText:
+                                                        isPasswordShow.value,
+                                                    autofillHints: const [
+                                                      AutofillHints.password
+                                                    ],
+                                                    validator: (value) {
+                                                      if (isPassword!) {
+                                                        if (value!
+                                                            .trim()
+                                                            .isEmpty) {
+                                                          return 'Please enter password';
+                                                        } else if (value.length <
+                                                            4) {
+                                                          return 'Password must be greater then 6';
+                                                        } else if (value.length >
+                                                            100) {
+                                                          return 'Password must be less then 100';
+                                                        }
+                                                      } else {
+                                                        if (value!
+                                                            .trim()
+                                                            .isEmpty) {
+                                                          return 'Please enter username or email';
+                                                        } else if (value.length <
+                                                            4) {
+                                                          return 'Please enter valid username or email';
+                                                        }
                                                       }
-                                                    } else {
-                                                      if (value!
-                                                          .trim()
-                                                          .isEmpty) {
-                                                        return 'Please enter username or email';
-                                                      } else if (value.length <
-                                                          4) {
-                                                        return 'Please enter valid username or email';
-                                                      }
-                                                    }
-                                                    return null;
-                                                  },
-                                                  keyboardType:
-                                                      TextInputType.text,
-                                                  maxLength: 32,
-                                                  textInputAction:
-                                                      TextInputAction.done,
-                                                  decoration: InputDecoration(
-                                                      hintText:
-                                                          Strings.password,
-                                                      counterText: "",
-                                                      filled: true,
-                                                      fillColor: AppTheme
-                                                          .colorEditFieldBg,
-                                                      focusColor: AppTheme
-                                                          .colorEditFieldBg,
-                                                      contentPadding:
-                                                          const EdgeInsets.symmetric(
-                                                              horizontal: 8,
-                                                              vertical: 18),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                color: AppTheme
-                                                                    .primaryColorVariant),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
-                                                      ),
-                                                      enabledBorder: const OutlineInputBorder(
+                                                      return null;
+                                                    },
+                                                    keyboardType:
+                                                        TextInputType.text,
+                                                    maxLength: 32,
+                                                    textInputAction:
+                                                        TextInputAction.done,
+                                                    decoration: InputDecoration(
+                                                        hintText:
+                                                            Strings.password,
+                                                        counterText: "",
+                                                        filled: true,
+                                                        fillColor: AppTheme
+                                                            .colorEditFieldBg,
+                                                        focusColor: AppTheme
+                                                            .colorEditFieldBg,
+                                                        contentPadding:
+                                                            const EdgeInsets.symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 18),
+                                                        border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(0),
                                                           borderSide: BorderSide(
-                                                              color: AppTheme
-                                                                  .primaryColorVariant),
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      5.0))),
-                                                      border: OutlineInputBorder(
-                                                          borderSide: const BorderSide(
-                                                              color: AppTheme
-                                                                  .primaryColor,
-                                                              width: 2.0),
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  5.0)),
-                                                      prefixIcon: const Icon(
-                                                        Icons.lock,
-                                                        color: Colors.grey,
-                                                      ),
-                                                      suffixIcon: GestureDetector(
-                                                        onTap: () {
-                                                          isPasswordShow.value =
-                                                              !isPasswordShow
-                                                                  .value;
-                                                        },
-                                                        child: Icon(
-                                                            isPasswordShow.value
-                                                                ? CupertinoIcons
-                                                                    .eye_slash_fill
-                                                                : CupertinoIcons
-                                                                    .eye,
-                                                            color: Colors.red),
-                                                      )),
+                                                            color: Colors.black.withOpacity(0.1),
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(0),
+                                                          borderSide: BorderSide(
+                                                            color: Colors.black.withOpacity(0.1),
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                        prefixIcon: const Icon(
+                                                          Icons.lock,
+                                                          color: Colors.grey,
+                                                        ),
+                                                        suffixIcon: GestureDetector(
+                                                          onTap: () {
+                                                            isPasswordShow.value =
+                                                                !isPasswordShow
+                                                                    .value;
+                                                          },
+                                                          child: Icon(
+                                                              isPasswordShow.value
+                                                                  ? CupertinoIcons
+                                                                      .eye_slash_fill
+                                                                  : CupertinoIcons
+                                                                      .eye,
+                                                              color: Colors.red),
+                                                        )),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        )),
-                                    addHeight(4),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: InkWell(
-                                        onTap: () {
-                                          Get.toNamed(MyRouter.forgotPassword);
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            Strings.forgotPassword,
-                                            style: const TextStyle(
-                                                color:
-                                                    AppTheme.textColorDarkBLue,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16),
+                                              ],
+                                            ),
+                                          )),
+                                      addHeight(4),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: InkWell(
+                                          onTap: () {
+                                            Get.toNamed(MyRouter.forgotPassword);
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              Strings.forgotPassword,
+                                              style: const TextStyle(
+                                                  color:
+                                                      AppTheme.textColorDarkBLue,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 16),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    addHeight(24),
-                                    CommonButton(
-                                      buttonHeight: 6.5,
-                                      buttonWidth: 95,
-                                      mainGradient:
-                                          AppTheme.primaryGradientColor,
-                                      text: Strings.buttonLogin,
-                                      textColor: Colors.white,
-                                      onTap: () async {
-                                        var fcmToken = await FirebaseMessaging.instance.getToken();
-                                        if (loginFormKey.currentState!.validate()) {
-                                          createLogin(
-                                                  userNameController.text,
-                                                  passwordController.text,
-                                                  _clientInfo.deviceId
-                                                      .toString(),
-                                                  fcmToken.toString(),
-                                                  context)
-                                              .then((value) async {
-                                            if (value.status == true) {
-                                              showToast(value.message);
-                                              // Helpers.createSnackBar(context,
-                                              //     value.message.toString());
-                                              SharedPreferences pref = await SharedPreferences.getInstance();
-                                              pref.setString('user', jsonEncode(value.data));
+                                      addHeight(24),
+                                      CommonButton(
+                                        buttonHeight: 6.5,
+                                        buttonWidth: 95,
+                                        mainGradient:
+                                            AppTheme.primaryGradientColor,
+                                        text: Strings.buttonLogin,
+                                        textColor: Colors.white,
+                                        onTap: () async {
+                                          var fcmToken = await FirebaseMessaging.instance.getToken();
+                                          if (loginFormKey.currentState!.validate()) {
+                                            createLogin(
+                                                    userNameController.text,
+                                                    passwordController.text,
+                                                    _clientInfo.deviceId
+                                                        .toString(),
+                                                    fcmToken.toString(),
+                                                    context)
+                                                .then((value) async {
+                                              if (value.status == true) {
+                                                showToast(value.message);
+                                                // Helpers.createSnackBar(context,
+                                                //     value.message.toString());
+                                                SharedPreferences pref = await SharedPreferences.getInstance();
+                                                pref.setString('user', jsonEncode(value.data));
 
-                                              controller.getUser();
+                                                controller.getUser();
 
-                                              if (Get.arguments != null) {
-                                                Get.offAndToNamed(MyRouter.customBottomBar);
-                                                } else {
-                                                  Get.back();
-                                                }
-                                            } else {
-                                              Get.defaultDialog(
-                                                  title: 'Log In',
-                                                  titleStyle: const TextStyle(
-                                                      color: AppTheme
-                                                          .primaryColor),
-                                                  middleTextStyle:
-                                                      const TextStyle(
-                                                          color: Colors.white),
-                                                  textConfirm: "Okay",
-                                                  onConfirm: () {
+                                                if (Get.arguments != null) {
+                                                  Get.offAndToNamed(MyRouter.customBottomBar);
+                                                  } else {
                                                     Get.back();
-                                                  },
-                                                  confirmTextColor:
-                                                      Colors.white,
-                                                  buttonColor:
-                                                      AppTheme.primaryColor,
-                                                  radius: 10,
-                                                  content: Text(value.message));
-                                              // showToast(value.message);
-                                            }
-                                            return;
-                                          });
-                                        }
-                                      },
-                                    ),
-                                    /*addHeight(16),
-                                    Row(
-                                      children: [
-                                        Expanded(child: Divider()),
-                                        Text('  or  '),
-                                        Expanded(child: Divider()),
-                                      ],
-                                    ),*/
-                                    addHeight(16),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            signInWithGoogle();
-                                          },
-                                          child: Container(
-                                            height: 38,
-                                            width: 38,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: AppTheme.primaryColor,
+                                                  }
+                                              } else {
+                                                Get.defaultDialog(
+                                                    title: 'Log In',
+                                                    titleStyle: const TextStyle(
+                                                        color: AppTheme
+                                                            .primaryColor),
+                                                    middleTextStyle:
+                                                        const TextStyle(
+                                                            color: Colors.white),
+                                                    textConfirm: "Okay",
+                                                    onConfirm: () {
+                                                      Get.back();
+                                                    },
+                                                    confirmTextColor:
+                                                        Colors.white,
+                                                    buttonColor:
+                                                        AppTheme.primaryColor,
+                                                    radius: 10,
+                                                    content: Text(value.message));
+                                                // showToast(value.message);
+                                              }
+                                              return;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                      /*addHeight(16),
+                                      Row(
+                                        children: [
+                                          Expanded(child: Divider()),
+                                          Text('  or  '),
+                                          Expanded(child: Divider()),
+                                        ],
+                                      ),*/
+                                      addHeight(16),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              signInWithGoogle();
+                                            },
+                                            child: Container(
+                                              height: 38,
+                                              width: 38,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: AppTheme.primaryColor,
+                                              ),
+                                              child: const Center(
+                                                  child: FaIcon(
+                                                FontAwesomeIcons.google,
+                                                size: 18,
+                                                color: Colors.white,
+                                              )),
                                             ),
-                                            child: const Center(
-                                                child: FaIcon(
-                                              FontAwesomeIcons.google,
-                                              size: 18,
-                                              color: Colors.white,
-                                            )),
                                           ),
-                                        ),
-                                        addWidth(30),
-                                        Platform.isIOS ?
-                                        InkWell(
-                                          onTap: () async {
-                                            loginWithApple(context);
-                                            // final appleIdCredential = await SignInWithApple.getAppleIDCredential(
-                                            //   scopes: [
-                                            //     AppleIDAuthorizationScopes.email,
-                                            //     AppleIDAuthorizationScopes.fullName,
-                                            //   ],
-                                            // );
-                                            // final oAuthProvider = OAuthProvider('apple.com');
-                                            // final credential = oAuthProvider.credential(
-                                            //   idToken: appleIdCredential.identityToken,
-                                            //   accessToken: appleIdCredential.authorizationCode,
-                                            // );
-                                            // UserCredential authResult =
-                                            // await FirebaseAuth.instance.signInWithCredential(credential);
-                                            // print("Apple Credientials:::"+credential.toString());
-                                            // print("Apple authResult:: uid=:"+authResult.user!.uid.toString());
-                                            // print("Apple authResult:: email=:"+authResult.user!.email.toString());
-                                            //
-                                            // SharedPreferences pref = await SharedPreferences.getInstance();
-                                            // pref.setString('socialLoginId', authResult.user!.uid.toString());
-                                            // SharedPreferences prefs = await SharedPreferences.getInstance();
-                                            // var deviceId = prefs.getString('deviceId');
-                                            // getSocialLogin(context,authResult.user!.uid.toString(), "apple",deviceId)
-                                            //     .then((value) async {
-                                            //   if (value.status) {
-                                            //     // showToast(value.message.toString());
-                                            //     SharedPreferences pref = await SharedPreferences.getInstance();
-                                            //     pref.setString('user', jsonEncode(value.data));
-                                            //     Get.offAndToNamed(MyRouter.customBottomBar);
-                                            //   } else {
-                                            //     // showToast(value.message.toString());
-                                            //     Get.offAndToNamed(MyRouter.signUpScreen, arguments: [
-                                            //       authResult.user!.uid.toString(),
-                                            //       authResult.user!.email.toString(),
-                                            //       "",
-                                            //       'apple',
-                                            //     ]);
-                                            //   }
-                                            // });
-                                          },
-                                          child: Container(
-                                            height: 38,
-                                            width: 38,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.circular(5),
-                                              color: Colors.black,
+                                          addWidth(30),
+                                          Platform.isIOS ?
+                                          InkWell(
+                                            onTap: () async {
+                                              loginWithApple(context);
+                                              // final appleIdCredential = await SignInWithApple.getAppleIDCredential(
+                                              //   scopes: [
+                                              //     AppleIDAuthorizationScopes.email,
+                                              //     AppleIDAuthorizationScopes.fullName,
+                                              //   ],
+                                              // );
+                                              // final oAuthProvider = OAuthProvider('apple.com');
+                                              // final credential = oAuthProvider.credential(
+                                              //   idToken: appleIdCredential.identityToken,
+                                              //   accessToken: appleIdCredential.authorizationCode,
+                                              // );
+                                              // UserCredential authResult =
+                                              // await FirebaseAuth.instance.signInWithCredential(credential);
+                                              // print("Apple Credientials:::"+credential.toString());
+                                              // print("Apple authResult:: uid=:"+authResult.user!.uid.toString());
+                                              // print("Apple authResult:: email=:"+authResult.user!.email.toString());
+                                              //
+                                              // SharedPreferences pref = await SharedPreferences.getInstance();
+                                              // pref.setString('socialLoginId', authResult.user!.uid.toString());
+                                              // SharedPreferences prefs = await SharedPreferences.getInstance();
+                                              // var deviceId = prefs.getString('deviceId');
+                                              // getSocialLogin(context,authResult.user!.uid.toString(), "apple",deviceId)
+                                              //     .then((value) async {
+                                              //   if (value.status) {
+                                              //     // showToast(value.message.toString());
+                                              //     SharedPreferences pref = await SharedPreferences.getInstance();
+                                              //     pref.setString('user', jsonEncode(value.data));
+                                              //     Get.offAndToNamed(MyRouter.customBottomBar);
+                                              //   } else {
+                                              //     // showToast(value.message.toString());
+                                              //     Get.offAndToNamed(MyRouter.signUpScreen, arguments: [
+                                              //       authResult.user!.uid.toString(),
+                                              //       authResult.user!.email.toString(),
+                                              //       "",
+                                              //       'apple',
+                                              //     ]);
+                                              //   }
+                                              // });
+                                            },
+                                            child: Container(
+                                              height: 38,
+                                              width: 38,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.circular(5),
+                                                color: Colors.black,
+                                              ),
+                                              child: const Center(
+                                                  child: FaIcon(
+                                                    FontAwesomeIcons.apple,
+                                                    size: 18,
+                                                    color: Colors.white,
+                                                  )),
                                             ),
-                                            child: const Center(
-                                                child: FaIcon(
-                                                  FontAwesomeIcons.apple,
-                                                  size: 18,
-                                                  color: Colors.white,
-                                                )),
-                                          ),
-                                        ) : InkWell(
-                                          onTap: () => signInFaceBook(),
-                                          child: Container(
-                                            height: 38,
-                                            width: 38,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: AppTheme.textColorSkyBLue,
+                                          ) : InkWell(
+                                            onTap: () => signInFaceBook(),
+                                            child: Container(
+                                              height: 38,
+                                              width: 38,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: AppTheme.textColorSkyBLue,
+                                              ),
+                                              child: const Center(
+                                                  child: FaIcon(
+                                                FontAwesomeIcons.facebookF,
+                                                size: 18,
+                                                color: Colors.white,
+                                              )),
                                             ),
-                                            child: const Center(
-                                                child: FaIcon(
-                                              FontAwesomeIcons.facebookF,
-                                              size: 18,
-                                              color: Colors.white,
-                                            )),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

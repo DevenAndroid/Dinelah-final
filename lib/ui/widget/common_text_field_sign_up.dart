@@ -60,19 +60,20 @@ class CommonTextFieldWidgetSignUp extends StatelessWidget {
                     // enabledBorder: InputBorder.none,
                     // errorBorder: InputBorder.none,
                     // disabledBorder: InputBorder.none,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                      const BorderSide(color: AppTheme.primaryColorVariant),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                        borderSide:
-                        BorderSide(color: AppTheme.primaryColorVariant),
-                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
                     border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: AppTheme.primaryColor, width: 2.0),
-                        borderRadius: BorderRadius.circular(5.0)),
+                      borderRadius: BorderRadius.circular(0),
+                      borderSide: BorderSide(
+                        color: Colors.black.withOpacity(0.1),
+                        width: 1,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(0),
+                      borderSide: BorderSide(
+                        color: Colors.black.withOpacity(0.1),
+                        width: 1,
+                      ),
+                    ),
                     prefixIcon: Icon(icon, color: Colors.grey,
                     ),
                     suffixIcon: isPassword

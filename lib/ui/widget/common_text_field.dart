@@ -12,11 +12,11 @@ class CommonTextFieldWidget extends StatelessWidget {
   TextEditingController controller;
 
   CommonTextFieldWidget(
-      {required this.icon,
-      this.isPassword: false,
+      {Key? key, required this.icon,
+      this.isPassword= false,
       required this.hint,
       required this.controller,
-      required this.bgColor});
+      required this.bgColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,26 +61,23 @@ class CommonTextFieldWidget extends StatelessWidget {
                       counterText: "",
                       filled: true,
                       fillColor: AppTheme.colorEditFieldBg,
-                      focusColor: AppTheme.colorEditFieldBg,
+                      focusColor: Colors.red,
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: 8, vertical: 18),
-                      // focusedBorder: InputBorder.none,
-                      // enabledBorder: InputBorder.none,
-                      // errorBorder: InputBorder.none,
-                      // disabledBorder: InputBorder.none,
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppTheme.primaryColorVariant),
-                        borderRadius: BorderRadius.circular(5.0),
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 18),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(0),
+                        borderSide: BorderSide(
+                          color: Colors.black.withOpacity(0.1),
+                          width: 1,
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppTheme.primaryColorVariant),
-                          borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                      border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: AppTheme.primaryColor, width: 2.0),
-                          borderRadius: BorderRadius.circular(5.0)),
+                        borderRadius: BorderRadius.circular(0),
+                        borderSide: BorderSide(
+                          color: Colors.black.withOpacity(0.1),
+                          width: 1,
+                        ),
+                      ),
                       prefixIcon: Icon(
                         icon,
                         color: Colors.grey,
@@ -97,7 +94,7 @@ class CommonTextFieldWidget extends StatelessWidget {
                                     : Colors.grey,
                               ),
                             )
-                          : SizedBox.shrink()),
+                          : const SizedBox.shrink()),
                 ),
               ),
             ],
