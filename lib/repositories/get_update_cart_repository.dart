@@ -52,6 +52,10 @@ Future<ModelResponseCommon> getUpdateCartData(
 
 Future<ModelResponseCommon> getUpdateCartVariationData(
     BuildContext context, productId, quantity, attributes) async {
+
+  OverlayEntry loader = Helpers.overlayLoader(context);
+  Overlay.of(context)!.insert(loader);
+
   var map = <String, dynamic>{};
   SharedPreferences pref = await SharedPreferences.getInstance();
   if (pref.getString('user') != null) {
@@ -69,9 +73,6 @@ Future<ModelResponseCommon> getUpdateCartVariationData(
     HttpHeaders.contentTypeHeader: 'application/json',
     HttpHeaders.acceptHeader: 'application/json',
   };
-
-  OverlayEntry loader = Helpers.overlayLoader(context);
-  Overlay.of(context)!.insert(loader);
 
   http.Response response = await http.post(Uri.parse(ApiUrls.getUpdateCartUrl),
       body: jsonEncode(map), headers: headers);
