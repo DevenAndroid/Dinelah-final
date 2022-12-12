@@ -68,25 +68,25 @@ class CheckoutState extends State<Checkout> {
           body: Stack(
             children: [
               WebView(
-                initialUrl: webUrl.toString(),
+                initialUrl: Uri.parse(webUrl).toString(),
                 javascriptMode: JavascriptMode.unrestricted,
+
                 onPageFinished: (String url) {
                   setState(() {
                     isDataLoad.value = true;
                   });
                 },
-                navigationDelegate: (action) {
-                  print('URL FOUND :: $action');
-                  if (!action.url
-                      .contains('/checkout')) {
-                    bottomNavController.getData();
-                    Get.offAllNamed(MyRouter.customBottomBar);
-                    return NavigationDecision.prevent;
-                  } else {
-                    bottomNavController.getData();
-                    return NavigationDecision.navigate;
-                  }
-                },
+                // navigationDelegate: (action) {
+                //   print('URL FOUND :: $action');
+                //   if (!action.url.contains('/checkout')) {
+                //     bottomNavController.getData();
+                //     Get.offAllNamed(MyRouter.customBottomBar);
+                //     return NavigationDecision.prevent;
+                //   } else {
+                //     bottomNavController.getData();
+                //     return NavigationDecision.navigate;
+                //   }
+                // },
               ),
               !isDataLoad.value
                   ? const Center(

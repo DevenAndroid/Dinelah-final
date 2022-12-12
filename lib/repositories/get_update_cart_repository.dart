@@ -15,6 +15,9 @@ import '../utils/ApiConstant.dart';
 
 Future<ModelResponseCommon> getUpdateCartData(
     BuildContext context, productId, quantity) async {
+  OverlayEntry loader = Helpers.overlayLoader(context);
+  Overlay.of(context)!.insert(loader);
+
   var map = <String, dynamic>{};
   SharedPreferences pref = await SharedPreferences.getInstance();
 
@@ -32,9 +35,6 @@ Future<ModelResponseCommon> getUpdateCartData(
     HttpHeaders.contentTypeHeader: 'application/json',
     HttpHeaders.acceptHeader: 'application/json',
   };
-
-  OverlayEntry loader = Helpers.overlayLoader(context);
-  Overlay.of(context)!.insert(loader);
 
   http.Response response = await http.post(Uri.parse(ApiUrls.getUpdateCartUrl),
       body: jsonEncode(map), headers: headers);

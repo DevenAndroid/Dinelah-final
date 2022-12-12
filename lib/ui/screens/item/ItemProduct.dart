@@ -177,23 +177,19 @@ class ItemProductState extends State<ItemProduct> {
                     ),
                     InkWell(
                       onTap: () {
-                        // print(popularProducts[index].type.toString());
-
                         bottomNavController.getData();
                         if (widget.popularProducts[widget.index].type
-                            .toString() ==
-                            "simple") {
+                            .toString() == "simple") {
                           getUpdateCartData(context,
                               widget.popularProducts[widget.index].id, 1)
                               .then((value) {
+                            showToast(value.message.toString());
                             if (value.status) {
-                              // ++bottomNavController.cartBadgeCount.value;
                               bottomNavController.getData();
-                              showToast(value.message.toString());
-                            } else {}
-                            return;
+                            }
                           });
-                        } else if (widget.popularProducts[widget.index].type
+                        }
+                        else if (widget.popularProducts[widget.index].type
                             .toString() ==
                             "variable") {
                           _getVariationBottomSheet(

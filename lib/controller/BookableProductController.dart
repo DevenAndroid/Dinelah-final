@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:dinelah/models/ModelBookableProduct.dart';
 import 'package:dinelah/repositories/bookable_end_date.dart';
 import 'package:dinelah/repositories/get_Bookable_Product.dart';
@@ -30,6 +33,7 @@ class BookableProductController extends GetxController {
         resourcesList.add(item.name!);
       }
       model.value = value;
+      log(jsonEncode(model.value));
       return null;
     });
   }

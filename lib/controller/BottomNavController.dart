@@ -16,7 +16,6 @@ class BottomNavController extends GetxController {
   void getData() {
     getCartCount().then((value) {
       cartBadgeCount.value = value.quantity;
-      return null;
     });
   }
 }

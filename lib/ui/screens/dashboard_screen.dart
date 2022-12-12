@@ -148,8 +148,7 @@ class DashBoardScreenState extends State<DashBoardScreen> {
                               itemHeight,
                               false);
                         },
-                        childCount: _controller
-                            .model.value.data!.popularProducts.length,
+                        childCount: _controller.model.value.data!.popularProducts.length,
                       ),
                     ),
                     const SliverPadding(

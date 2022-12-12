@@ -143,16 +143,6 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Text(
-                          "${controller.model.value.data!.durationType}::${controller.model.value.data!.durationUnit}",
-                          style: const TextStyle(
-                              color: AppTheme.colorWhite,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text(
                           controller.model.value.data!.description.toString(),
                           style: const TextStyle(
                               height: 1.8, color: Colors.white, fontSize: 20),
@@ -169,8 +159,13 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            controller.model.value.data!.durationType!="customer" || controller.model.value.data!.durationUnit!="month"
-                                ? TableCalendar(
+                            // controller.model.value.data!.durationType=="customer" ||
+                            //     controller.model.value.data!.durationUnit!="month"
+                            //     ?
+                            // controller.model.value.data!.durationType=="customer" ||
+                            //    controller.model.value.data!.durationUnit=="month" ?
+                            controller.model.value.data!.durationUnit!="month" ?
+                            TableCalendar(
                               firstDay: DateTime(2010),
                               lastDay: DateTime(2030),
                               focusedDay: DateTime.now(),
@@ -235,8 +230,8 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
                                     color: AppTheme.primaryColor,
                                     shape: BoxShape.circle),
                               ),
-                            )
-                                : Padding(
+                            ) :
+                            Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 12),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -244,15 +239,17 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
                                 children: [
                                   const Text('Duration:'),
                                   addHeight(4.0),
+                                  if(controller.model.value.data!.durationType=="customer")
                                   CommonTextFieldWidgetForm(
                                     hint: 'Enter Month(s)',
                                     controller: durationController,
                                   ),
                                   addHeight(20.0),
+                                  if(controller.model.value.data!.durationUnit!="month")
                                   GridView.builder(
                                     shrinkWrap: true,
                                     physics:
-                                    NeverScrollableScrollPhysics(),
+                                    const NeverScrollableScrollPhysics(),
                                     gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 4,
@@ -312,7 +309,7 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
                                                 ? GridView.builder(
                                                     shrinkWrap: true,
                                                     physics:
-                                                        NeverScrollableScrollPhysics(),
+                                                        const NeverScrollableScrollPhysics(),
                                                     gridDelegate:
                                                         const SliverGridDelegateWithFixedCrossAxisCount(
                                                       crossAxisCount: 4,

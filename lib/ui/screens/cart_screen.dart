@@ -417,7 +417,8 @@ class CartScreenState extends State<CartScreen> {
               right: 10,
               child: GestureDetector(
                 onTap: () {
-                  getUpdateCartData(context, item.product!.id, 0)
+                  getUpdateCartData(
+                      context, item.product!.id, 0)
                       .then((value) async {
                     bottomNavController.getData();
                     if (value.status) {
