@@ -80,8 +80,8 @@ class MyRouter {
         name: MyRouter.dashBoardScreen, page: () => const DashBoardScreen()),
     GetPage(
         name: MyRouter.customBottomBar, page: () => const CustomNavigationBar()),
-    GetPage(name: MyRouter.chatScreen, page: () => ChatterScreen()),
-    GetPage(name: MyRouter.verifySignUpOtp, page: () => VerifySignUpScreen()),
+    GetPage(name: MyRouter.chatScreen, page: () => const ChatterScreen()),
+    GetPage(name: MyRouter.verifySignUpOtp, page: () => const VerifySignUpScreen()),
     GetPage(name: MyRouter.categoryScreen, page: () => const CategoryScreen()),
     GetPage(name: MyRouter.allHostsScreen, page: () => AllHostsScreen()),
     GetPage(name: MyRouter.hostsScreen, page: () => const HostsScreen()),

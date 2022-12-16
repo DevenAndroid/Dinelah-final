@@ -66,43 +66,26 @@ class BookingOrderDetailState extends State<BookingOrderDetail>
                           padding: const EdgeInsets.all(10),
                           child: Column(
                             children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _getTitleAndIconRow(
-                                        "OrderId: #" +
-                                            snapshot.data!.data!.orderData.id
-                                                .toString(),
-                                        snapshot
-                                            .data!.data!.orderData.dateCreated
-                                            .toString(),
-                                        Icons.calendar_today,
-                                        snapshot.data!.data!.orderData.status
-                                            .toString()
-//DateFormat("MMM, dd-yyyy").format(order.dateCreated.date),
-                                        ),
-                                  ),
-                                ],
-                              ),
+                              _getTitleAndIconRow(
+                                  "OrderId: #${snapshot.data!.data!.orderData.id}",
+                                  snapshot.data!.data!.orderData.dateCreated
+                                      .toString(),
+                                  Icons.calendar_today,
+                                  snapshot.data!.data!.orderData.status
+                                      .toString()),
                               addHeight(24),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _getItemAndStatusRow(
-                                      snapshot.data!.data!.orderData.lineItems[0].quantity
-                                              .toString() +
-                                          'x ' +
-                                          snapshot.data!.data!.orderData.lineItems[0].name
-                                              .toString(),
-                                      snapshot.data!.data!.orderData.paymentMethodTitle
-                                          .toString(),
-                                      snapshot.data!.data!.orderData.lineItems[0].currencySymbol+
-                                          snapshot.data!.data!.orderData.lineItems[0].total
-                                              .toString(),
-//DateFormat("MMM, dd-yyyy").format(order.dateCreated.date),
-                                    ),
-                                  ),
-                                ],
+                              _getItemAndStatusRow(
+                                '${snapshot.data!.data!.orderData.lineItems[0]
+                                        .quantity}x ${snapshot
+                                        .data!.data!.orderData.lineItems[0].name}',
+                                snapshot
+                                    .data!.data!.orderData.paymentMethodTitle
+                                    .toString(),
+                                snapshot.data!.data!.orderData.lineItems[0]
+                                        .currencySymbol +
+                                    snapshot.data!.data!.orderData.lineItems[0]
+                                        .total
+                                        .toString(),
                               ),
                             ],
                           ),
@@ -174,65 +157,62 @@ class BookingOrderDetailState extends State<BookingOrderDetail>
                         ),
                       )),
                       addHeight(16),
-                      Positioned(
-                        bottom: 0,
-                        child: Card(
-                            child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.only(
-                              top: 10, left: 10, right: 10),
-                          child: Column(
-                            children: [
-                              addHeight(20),
-                              _getPaymentDetails(
-                                  'Delivery fee',
+                      Card(
+                          child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.only(
+                            top: 10, left: 10, right: 10),
+                        child: Column(
+                          children: [
+                            addHeight(20),
+                            _getPaymentDetails(
+                                'Delivery fee',
+                                storeInfo.orderData.currencySymbol
+                                        .toString() +
+                                    storeInfo.orderData.shippingTotal
+                                        .toString()),
+                            addHeight(24),
+                            _getPaymentDetails(
+                                'Tax (Vat)',
+                                storeInfo.orderData.currencySymbol
+                                        .toString() +
+                                    storeInfo.orderData.totalTax.toString()),
+                            addHeight(24),
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Total Payment',
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green),
+                                ),
+                                Text(
                                   storeInfo.orderData.currencySymbol
                                           .toString() +
-                                      storeInfo.orderData.shippingTotal
-                                          .toString()),
-                              addHeight(24),
-                              _getPaymentDetails(
-                                  'Tax (Vat)',
-                                  storeInfo.orderData.currencySymbol
-                                          .toString() +
-                                      storeInfo.orderData.totalTax.toString()),
-                              addHeight(24),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    'Total Payment',
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green),
-                                  ),
-                                  Text(
-                                    storeInfo.orderData.currencySymbol
-                                            .toString() +
-                                        storeInfo.orderData.total.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.green),
-                                  )
-                                ],
-                              ),
-                              /*addHeight(30),
+                                      storeInfo.orderData.total.toString(),
+                                  style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.green),
+                                )
+                              ],
+                            ),
+                            /*addHeight(30),
                       CommonButton(
-                          buttonHeight: 6.5,
-                          buttonWidth: 80,
-                          text: 'Mark Delivered',
-                          onTap: (){
-                            // Get.toNamed(MyRouter.cartScreen);
-                          },
-                          mainGradient: AppTheme.primaryGradientColor),*/
-                              addHeight(20),
-                            ],
-                          ),
-                        )),
-                      ),
+                        buttonHeight: 6.5,
+                        buttonWidth: 80,
+                        text: 'Mark Delivered',
+                        onTap: (){
+                          // Get.toNamed(MyRouter.cartScreen);
+                        },
+                        mainGradient: AppTheme.primaryGradientColor),*/
+                            addHeight(20),
+                          ],
+                        ),
+                      )),
 
                       // Text('tyggh'),
                       // StoreInformation(snapshot.data!.data),
@@ -353,45 +333,40 @@ class BookingOrderDetailState extends State<BookingOrderDetail>
 
   Widget _getItemAndStatusRow(
       String item, String payMode, String productTotal) {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    item,
-                    style: const TextStyle(
-                      color: Color(0xff303c5e),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    productTotal,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              addHeight(4.0),
-              Text(
-                payMode,
-                textScaleFactor: 1.0,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                item,
                 style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w700,
+                  color: Color(0xff303c5e),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
-              )
-            ],
+              ),
+            ),
+            Text(
+              productTotal,
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        addHeight(4.0),
+        Text(
+          payMode,
+          textScaleFactor: 1.0,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.grey,
+            fontWeight: FontWeight.w700,
           ),
         )
       ],

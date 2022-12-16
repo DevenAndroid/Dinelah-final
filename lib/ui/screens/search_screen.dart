@@ -9,6 +9,7 @@ import 'package:dinelah/utils/ApiConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controller/CartController.dart';
 import '../../res/app_assets.dart';
 import '../../routers/my_router.dart';
 import '../widget/common_widget.dart';
@@ -274,7 +275,8 @@ class SearchProductState extends State<SearchProduct> {
   }
 
   Widget orderCard(ModelProduct product) {
-    final bottomNavController = Get.put(BottomNavController());
+    final CartController _cartController = Get.put(CartController());
+    // final bottomNavController = Get.put(BottomNavController());
     return GestureDetector(
       onTap: () {
         if (product.type.toString() == "simple") {
@@ -379,12 +381,7 @@ class SearchProductState extends State<SearchProduct> {
                                   .then((value) {
                                     showToast(value.message);
                                 if (value.status) {
-
-                                  // final bottomNavController = Get.put(BottomNavController());
-                                  // ++bottomNavController.cartBadgeCount.value;
-                                  bottomNavController.getData();
-                                  // Helpers.createSnackBar(
-                                  //     context, value.message.toString());
+                                  _cartController.getData();
                                 } else {}
                                 return;
                               });

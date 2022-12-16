@@ -44,7 +44,7 @@ class BookingProductScreenState extends State<BookingProductScreen> {
             fit: BoxFit.contain,
           )),
       child: Scaffold(
-        appBar: backAppBar('Booking product'),
+        appBar: backAppBar(''),
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           child: SizedBox(

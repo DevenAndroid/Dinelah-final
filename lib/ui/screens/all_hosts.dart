@@ -18,6 +18,8 @@ import 'package:get/get.dart';
 class AllHostsScreen extends StatelessWidget {
   final searchController = TextEditingController();
   final controller = Get.put(VendorsController());
+
+  AllHostsScreen({Key? key}) : super(key: key);
   //
   // @override
   // void initState() {

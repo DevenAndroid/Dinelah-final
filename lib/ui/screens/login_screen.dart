@@ -149,30 +149,22 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              AppAssets.logInBg,
+            ),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Stack(
           children: [
-            Container(
-              height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    AppAssets.logInBg,
-                  ),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
             Positioned(
               top: 60,
-              child: InkWell(
-                onTap: () {
-                  // Get.toNamed(MyRouter.customBottomBar);
-                },
-                child: Image.asset(
-                  AppAssets.logoWelcome,
-                  width: screenSize.width,
-                ),
+              child: Image.asset(
+                AppAssets.logoWelcome,
+                width: screenSize.width,
               ),
             ),
             Positioned(
@@ -514,7 +506,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     Positioned(
-                      // top: 6,
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: Row(

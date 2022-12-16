@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dinelah/routers/my_router.dart';
@@ -69,6 +70,9 @@ Future<ModelResponseCommon> getUpdateCartVariationData(
   map['product_id'] = productId;
   map['quantity'] = quantity;
 
+  log("Update Cart.. Map.... ${map.toString()}");
+  log("Update Cart.. Map Attribute.... ${jsonEncode(attributes)}");
+
   final headers = {
     HttpHeaders.contentTypeHeader: 'application/json',
     HttpHeaders.acceptHeader: 'application/json',
@@ -76,6 +80,8 @@ Future<ModelResponseCommon> getUpdateCartVariationData(
 
   http.Response response = await http.post(Uri.parse(ApiUrls.getUpdateCartUrl),
       body: jsonEncode(map), headers: headers);
+
+  log("Update Cart.. response.... ${response.body}");
 
   if (response.statusCode == 200) {
     Helpers.hideLoader(loader);

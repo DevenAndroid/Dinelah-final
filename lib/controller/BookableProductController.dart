@@ -46,8 +46,10 @@ class BookableProductController extends GetxController {
       isEndDataLoading.value = true;
       if (value.status) {
         if (value.endTimeSlots.isEmpty) {
+          if((model.value.data!.durationType != 'fixed') && (model.value.data!.durationUnit == "hour" || model.value.data!.durationUnit == "minute")){
           showToast(
               'No slot found for selected time.\nPlease select another time');
+          }
         }
         for (var item in value.endTimeSlots) {
           if (!mListEndTime.contains(item.time)) {

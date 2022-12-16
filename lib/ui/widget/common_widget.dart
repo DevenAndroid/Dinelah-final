@@ -1,12 +1,10 @@
 import 'package:badges/badges.dart';
-import 'package:dinelah/controller/BottomNavController.dart';
 import 'package:dinelah/controller/ProfileController.dart';
 import 'package:dinelah/controller/vendorsListController.dart';
 import 'package:dinelah/res/app_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../controller/CartController.dart';
 import '../../res/theme/theme.dart';
 import '../../routers/my_router.dart';
@@ -105,8 +103,7 @@ void getAlertDialog(title, value, onTap) {
 
 AppBar backAppBar(title) {
   final CartController cartController = Get.put(CartController());
-  final bottomNavController = Get.put(BottomNavController());
-  final ProfileController _profileController = Get.put(ProfileController());
+  final ProfileController profileController = Get.put(ProfileController());
   String? userImage;
 
   return AppBar(
@@ -123,7 +120,7 @@ AppBar backAppBar(title) {
               final controller = Get.put(VendorsController());
               controller.getResetData();
             } else if (title == 'Checkout') {
-              bottomNavController.getData();
+              cartController.getData();
             }
             cartController.getData();
             Get.back();
@@ -158,13 +155,14 @@ AppBar backAppBar(title) {
             toAnimate: true,
             badgeContent: Obx(() {
               return Text(
-                bottomNavController.cartBadgeCount.toString(),
+                  cartController.isDataLoading.value ?
+                  cartController.model.value.data!.items.length.toString() :"0",
                 style: const TextStyle(color: Colors.white),
               );
             }),
             child: InkWell(
               onTap: () {
-                Get.to(CustomNavigationBar(
+                Get.to(const CustomNavigationBar(
                   index: 1,
                 ));
               },
@@ -186,8 +184,8 @@ AppBar backAppBar(title) {
       Padding(
         padding: const EdgeInsets.only(right: 16.0),
         child: Obx(() {
-          if (_profileController.isDataLoading.value) {
-            userImage = _profileController.model.value.data?.profileImage;
+          if (profileController.isDataLoading.value) {
+            userImage = profileController.model.value.data?.profileImage;
           }
           return Visibility(
             visible: true,
@@ -233,8 +231,8 @@ AppBar backAppBar(title) {
 
 AppBar backAppBarChat(title) {
   final CartController cartController = Get.put(CartController());
-  final bottomNavController = Get.put(BottomNavController());
-  final ProfileController _profileController = Get.put(ProfileController());
+  // final bottomNavController = Get.put(BottomNavController());
+  final ProfileController profileController = Get.put(ProfileController());
   String? userImage;
 
   return AppBar(
@@ -279,13 +277,14 @@ AppBar backAppBarChat(title) {
             toAnimate: true,
             badgeContent: Obx(() {
               return Text(
-                bottomNavController.cartBadgeCount.toString(),
+                cartController.isDataLoading.value ?
+                cartController.model.value.data!.items.length.toString() :"0",
                 style: const TextStyle(color: Colors.white),
               );
             }),
             child: InkWell(
               onTap: () {
-                Get.to(CustomNavigationBar(
+                Get.to(const CustomNavigationBar(
                   index: 1,
                 ));
               },
@@ -307,8 +306,8 @@ AppBar backAppBarChat(title) {
       Padding(
         padding: const EdgeInsets.only(right: 16.0),
         child: Obx(() {
-          if (_profileController.isDataLoading.value) {
-            userImage = _profileController.model.value.data?.profileImage;
+          if (profileController.isDataLoading.value) {
+            userImage = profileController.model.value.data?.profileImage;
           }
           return Visibility(
             visible: true,
@@ -354,8 +353,8 @@ AppBar backAppBarChat(title) {
 
 AppBar backAppBarRed(title) {
   final CartController cartController = Get.put(CartController());
-  final bottomNavController = Get.put(BottomNavController());
-  final ProfileController _profileController = Get.put(ProfileController());
+  // final bottomNavController = Get.put(BottomNavController());
+  final ProfileController profileController = Get.put(ProfileController());
   String? userImage;
 
   return AppBar(
@@ -401,13 +400,14 @@ AppBar backAppBarRed(title) {
             toAnimate: true,
             badgeContent: Obx(() {
               return Text(
-                bottomNavController.cartBadgeCount.toString(),
+                cartController.isDataLoading.value ?
+                cartController.model.value.data!.items.length.toString() :"0",
                 style: const TextStyle(color: Colors.white),
               );
             }),
             child: InkWell(
               onTap: () {
-                Get.to(CustomNavigationBar(
+                Get.to(const CustomNavigationBar(
                   index: 1,
                 ));
               },
@@ -429,8 +429,8 @@ AppBar backAppBarRed(title) {
       Padding(
         padding: const EdgeInsets.only(right: 16.0),
         child: Obx(() {
-          if (_profileController.isDataLoading.value) {
-            userImage = _profileController.model.value.data?.profileImage;
+          if (profileController.isDataLoading.value) {
+            userImage = profileController.model.value.data?.profileImage;
           }
           return Visibility(
             visible: true,
@@ -523,7 +523,7 @@ SizedBox loader(context) => SizedBox(
       color: AppTheme.primaryColor,
     )));
 
-Widget loaderNoSize(context) => Center(
+Widget loaderNoSize(context) => const Center(
         child: CircularProgressIndicator(
       color: AppTheme.primaryColor,
     ));

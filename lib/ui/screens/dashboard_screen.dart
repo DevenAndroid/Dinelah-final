@@ -34,8 +34,8 @@ class DashBoardScreenState extends State<DashBoardScreen> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final double itemHeight = screenSize.height / 2.8;
-    final double  itemWidth = screenSize.width / 2;
+    final double itemHeight = screenSize.height / 4;
+    final double itemWidth = screenSize.width / 2;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Obx(() {
@@ -135,7 +135,6 @@ class DashBoardScreenState extends State<DashBoardScreen> {
                     SliverGrid(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          // childAspectRatio: (itemWidth / itemHeight),
                           mainAxisExtent: 242,
                           mainAxisSpacing: 10.0,
                           crossAxisSpacing: 10.0),

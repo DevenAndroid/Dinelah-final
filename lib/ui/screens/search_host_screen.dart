@@ -10,6 +10,7 @@ import 'package:dinelah/utils/ApiConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controller/CartController.dart';
 import '../../res/app_assets.dart';
 import '../../routers/my_router.dart';
 import '../widget/common_widget.dart';
@@ -23,6 +24,7 @@ class SearchHostProduct extends StatefulWidget {
 
 class SearchHostProductState extends State<SearchHostProduct> {
   final controller = Get.put(VendorsController());
+  final CartController _cartController = Get.put(CartController());
   bool value = false;
   int? val = -1;
 
@@ -445,7 +447,6 @@ class SearchHostProductState extends State<SearchHostProduct> {
   }
 
   Widget orderCard(ModelProduct product) {
-    final bottomNavController = Get.put(BottomNavController());
     return GestureDetector(
       onTap: () {},
       child: Container(
@@ -532,8 +533,9 @@ class SearchHostProductState extends State<SearchHostProduct> {
                             if (product.type.toString() == "simple") {
                               getUpdateCartData(context, product.id, 1)
                                   .then((value) {
+                                _cartController.getData();
                                 if (value.status) {
-                                  ++bottomNavController.cartBadgeCount.value;
+                                  // ++bottomNavController.cartBadgeCount.value;
                                   Helpers.createSnackBar(
                                       context, value.message.toString());
                                 } else {}

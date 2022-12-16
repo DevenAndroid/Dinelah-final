@@ -14,6 +14,8 @@ import 'package:get/get.dart';
 
 import 'package:flutter_html/flutter_html.dart';
 
+import '../../../controller/CartController.dart';
+
 class ItemProduct extends StatefulWidget {
   List<ModelProduct> popularProducts;
   int index;
@@ -35,7 +37,8 @@ class ItemProductState extends State<ItemProduct> {
   var attributeColor;
 
   final _wishListController = Get.put(WishListController());
-  final bottomNavController = Get.put(BottomNavController());
+
+  final CartController _cartController = Get.put(CartController());
 
   @override
   Widget build(BuildContext context) {
@@ -80,35 +83,33 @@ class ItemProductState extends State<ItemProduct> {
                       elevation: 3,
                       child: SizedBox(
                         height: widget.itemHeight / 2.1,
-                        width: widget.itemHeight/ 2.1,
+                        width: widget.itemHeight / 2.1,
                         child: ClipRRect(
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(100)),
+                              const BorderRadius.all(Radius.circular(100)),
                           child: CachedNetworkImage(
                             imageUrl:
-                            widget.popularProducts[widget.index].imageUrl,
-                            imageBuilder: (context, imageProvider) =>
-                                Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.fill,
-                                      // colorFilter: ColorFilter.mode(
-                                      //     Colors.red,
-                                      //     BlendMode.colorBurn
-                                      // )
-                                    ),
-                                  ),
+                                widget.popularProducts[widget.index].imageUrl,
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.fill,
+                                  // colorFilter: ColorFilter.mode(
+                                  //     Colors.red,
+                                  //     BlendMode.colorBurn
+                                  // )
                                 ),
-                            placeholder: (context, url) =>
-                                Container(
-                                    height: 4,
-                                    width: 4,
-                                    child: const CircularProgressIndicator(
-                                      color: AppTheme.primaryColor,
-                                    )),
+                              ),
+                            ),
+                            placeholder: (context, url) => Container(
+                                height: 4,
+                                width: 4,
+                                child: const CircularProgressIndicator(
+                                  color: AppTheme.primaryColor,
+                                )),
                             errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                const Icon(Icons.error),
                           ),
                           // Image.network(
                           //   widget.popularProducts[widget.index].imageUrl,
@@ -177,26 +178,22 @@ class ItemProductState extends State<ItemProduct> {
                     ),
                     InkWell(
                       onTap: () {
-                        bottomNavController.getData();
+                        _cartController.getData();
                         if (widget.popularProducts[widget.index].type
-                            .toString() == "simple") {
+                                .toString() ==
+                            "simple") {
                           getUpdateCartData(context,
-                              widget.popularProducts[widget.index].id, 1)
+                                  widget.popularProducts[widget.index].id, 1)
                               .then((value) {
                             showToast(value.message.toString());
                             if (value.status) {
-                              bottomNavController.getData();
+                              _cartController.getData();
                             }
                           });
-                        }
-                        else if (widget.popularProducts[widget.index].type
-                            .toString() ==
+                        } else if (widget.popularProducts[widget.index].type.toString() ==
                             "variable") {
-                          _getVariationBottomSheet(
-                              widget.popularProducts[widget.index]);
-                        } else if (widget.popularProducts[widget.index].type
-                            .toString() ==
-                            "booking") {
+                          _getVariationBottomSheet(widget.popularProducts[widget.index]);
+                        } else if (widget.popularProducts[widget.index].type.toString() == "booking") {
                           Get.toNamed(MyRouter.bookingProductScreen,
                               arguments: [
                                 widget.popularProducts[widget.index]
@@ -221,15 +218,16 @@ class ItemProductState extends State<ItemProduct> {
                 ),
               ],
             ),
-            Obx(() {
-              return Positioned(
-                right: 0,
-                child: InkWell(
+            Positioned(
+              right: 0,
+              child: Obx(() {
+                return InkWell(
                   onTap: () {
                     widget.popularProducts[widget.index].isInWishlist.value =
-                    !widget.popularProducts[widget.index].isInWishlist.value;
+                        !widget
+                            .popularProducts[widget.index].isInWishlist.value;
                     addToWishlist(context,
-                        widget.popularProducts[widget.index].id.toString())
+                            widget.popularProducts[widget.index].id.toString())
                         .then((value) {
                       if (value.status) {
                         _wishListController.getYourWishList();
@@ -241,10 +239,8 @@ class ItemProductState extends State<ItemProduct> {
                     if (widget.isWishList) {
                       // widget.popularProducts.removeAt(widget.index);
                       _wishListController.getYourWishList();
-                      widget.controller
-                          .getWishlistData()
-                          .then((value) =>
-                      widget.controller.model.value = value);
+                      widget.controller.getWishlistData().then(
+                          (value) => widget.controller.model.value = value);
                     }
                   },
                   child: Icon(
@@ -253,9 +249,9 @@ class ItemProductState extends State<ItemProduct> {
                         : Icons.favorite_border,
                     color: AppTheme.primaryColor,
                   ),
-                ),
-              );
-            })
+                );
+              }),
+            )
           ],
         ),
       ),

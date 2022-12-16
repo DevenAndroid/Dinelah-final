@@ -23,7 +23,6 @@ class CartScreen extends StatefulWidget {
 
 class CartScreenState extends State<CartScreen> {
   final CartController _cartController = Get.put(CartController());
-  final bottomNavController = Get.put(BottomNavController());
 
   @override
   void deactivate() {
@@ -99,8 +98,7 @@ class CartScreenState extends State<CartScreen> {
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 return orderCard(
-                                  _cartController
-                                      .model.value.data!.items,
+                                  _cartController.model.value.data!.items,
                                   index,
                                 );
                               }
@@ -223,204 +221,199 @@ class CartScreenState extends State<CartScreen> {
       onTap: () {
         //Get.toNamed(MyRouter.singleProductScreen);
       },
-      child: Stack(
-        children: [
-          Card(
-            margin: const EdgeInsets.only(bottom: 10),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Material(
-                    borderRadius: BorderRadius.circular(50),
-                    elevation: 2,
-                    child: SizedBox(
-                      height: 95,
-                      width: 95,
-                      child: ClipRRect(
-                        borderRadius:
-                        const BorderRadius.all(Radius.circular(50)),
-                        child: Image.network(
-                          item.product!.imageUrl,
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            return Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 10.0, bottom: 10.0),
-                                child: CircularProgressIndicator(
-                                  color: AppTheme.primaryColor,
-                                  value: loadingProgress.expectedTotalBytes !=
-                                      null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              ),
-                            );
-                          },
-                          fit: BoxFit.fill,
-                        ),
-                      ),
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Material(
+                borderRadius: BorderRadius.circular(50),
+                elevation: 2,
+                child: SizedBox(
+                  height: 95,
+                  width: 95,
+                  child: ClipRRect(
+                    borderRadius:
+                    const BorderRadius.all(Radius.circular(50)),
+                    child: Image.network(
+                      item.product!.imageUrl,
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10.0, bottom: 10.0),
+                            child: CircularProgressIndicator(
+                              color: AppTheme.primaryColor,
+                              value: loadingProgress.expectedTotalBytes !=
+                                  null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          ),
+                        );
+                      },
+                      fit: BoxFit.fill,
                     ),
                   ),
-                  addWidth(10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      addHeight(8),
-                      Text(
-                        item.product!.name,
-                        style: const TextStyle(
-                            color: AppTheme.textColorDarkBLue,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold),
+                ),
+              ),
+              addWidth(10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    addHeight(8),
+                    Text(
+                      item.product!.name,
+                      style: const TextStyle(
+                          color: AppTheme.textColorDarkBLue,
+                          fontSize: 16.0,
+                          overflow: TextOverflow.ellipsis,
+                          fontWeight: FontWeight.bold
                       ),
-                      addHeight(8),
-                      Text(
-                        '${item.product!.currencySymbol} ${item.product!.price}',
-                        style: const TextStyle(
-                            color: AppTheme.primaryColor,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      addHeight(8),
-                      item.product!.type == 'booking'
-                          ? Row(
-                        children: [
-                          Text(
-                            "Qty: ${item.quantity}",
-                            style: const TextStyle(
-                                color: AppTheme.primaryColor,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      )
-                          : Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              if (item.quantity < 1) {
-                                getUpdateCartData(
-                                    context, item.product!.id, 0)
-                                    .then((value) async {
-                                  if (value.status) {
-                                    showToast(value.message);
-                                    setState(() {
-                                      getCartData().then((value) =>
-                                      _cartController.model.value =
-                                          value);
-                                    });
-                                  } else {
-                                    Helpers.createSnackBar(context,
-                                        value.message.toString());
-                                  }
-                                  return;
-                                });
-                              } else {
-                                getUpdateCartData(
-                                    context, item.product!.id, '-1')
-                                    .then((value) async {
-                                  if (value.status) {
-                                    showToast(value.message);
-                                    bottomNavController.getData();
-                                    if (item.quantity == 1) {
-                                      items.removeAt(index);
-                                    } else {
-                                      item.quantity = item.quantity - 1;
-                                    }
-                                    setState(() {
-                                      getCartData().then((value) =>
-                                      _cartController.model.value =
-                                          value);
-                                    });
-                                  } else {
-                                    Helpers.createSnackBar(context,
-                                        value.message.toString());
-                                  }
-                                  return;
-                                });
-                              }
-                            },
-                            child: Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                    color: AppTheme.primaryColor,
-                                    borderRadius:
-                                    BorderRadius.circular(5)),
-                                child: const Icon(
-                                  Icons.remove,
-                                  size: 16,
-                                  color: Colors.white,
-                                )),
-                          ),
-                          addWidth(10),
-                          Text(
-                            item.quantity.toString(),
-                            style: const TextStyle(
-                                color: AppTheme.primaryColor,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          addWidth(10),
-                          InkWell(
-                            onTap: () {
+                    ),
+                    addHeight(8),
+                    Text(
+                      '${item.product!.currencySymbol} ${item.product!.price}',
+                      style: const TextStyle(
+                          color: AppTheme.primaryColor,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    addHeight(8),
+                    item.product!.type == 'booking'
+                        ? Row(
+                      children: [
+                        Text(
+                          "Qty: ${item.quantity}",
+                          style: const TextStyle(
+                              color: AppTheme.primaryColor,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )
+                        : Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            if (item.quantity < 1) {
                               getUpdateCartData(
-                                  context, item.product!.id, 1)
+                                  context, item.product!.id, 0)
                                   .then((value) async {
-                                bottomNavController.getData();
                                 if (value.status) {
                                   showToast(value.message);
                                   setState(() {
-                                    item.quantity = item.quantity + 1;
                                     getCartData().then((value) =>
                                     _cartController.model.value =
                                         value);
                                   });
                                 } else {
-                                  Helpers.createSnackBar(
-                                      context, value.message.toString());
+                                  Helpers.createSnackBar(context,
+                                      value.message.toString());
                                 }
                                 return;
                               });
-                            },
-                            child: Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                    color: AppTheme.primaryColor,
-                                    borderRadius:
-                                    BorderRadius.circular(5)),
-                                child: const Icon(
-                                  Icons.add,
-                                  size: 16,
-                                  color: Colors.white,
-                                )),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ],
+                            } else {
+                              getUpdateCartData(
+                                  context, item.product!.id, '-1')
+                                  .then((value) async {
+                                if (value.status) {
+                                  showToast(value.message);
+                                  _cartController.getData();
+                                  if (item.quantity == 1) {
+                                    items.removeAt(index);
+                                  } else {
+                                    item.quantity = item.quantity - 1;
+                                  }
+                                  setState(() {
+                                    getCartData().then((value) =>
+                                    _cartController.model.value =
+                                        value);
+                                  });
+                                } else {
+                                  Helpers.createSnackBar(context,
+                                      value.message.toString());
+                                }
+                                return;
+                              });
+                            }
+                          },
+                          child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                  color: AppTheme.primaryColor,
+                                  borderRadius:
+                                  BorderRadius.circular(5)),
+                              child: const Icon(
+                                Icons.remove,
+                                size: 16,
+                                color: Colors.white,
+                              )),
+                        ),
+                        addWidth(10),
+                        Text(
+                          item.quantity.toString(),
+                          style: const TextStyle(
+                              color: AppTheme.primaryColor,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        addWidth(10),
+                        InkWell(
+                          onTap: () {
+                            getUpdateCartData(
+                                context, item.product!.id, 1)
+                                .then((value) async {
+                              _cartController.getData();
+                              if (value.status) {
+                                showToast(value.message);
+                                setState(() {
+                                  item.quantity = item.quantity + 1;
+                                  getCartData().then((value) =>
+                                  _cartController.model.value =
+                                      value);
+                                });
+                              } else {
+                                Helpers.createSnackBar(
+                                    context, value.message.toString());
+                              }
+                              return;
+                            });
+                          },
+                          child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                  color: AppTheme.primaryColor,
+                                  borderRadius:
+                                  BorderRadius.circular(5)),
+                              child: const Icon(
+                                Icons.add,
+                                size: 16,
+                                color: Colors.white,
+                              )),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ),
-          Positioned(
-              top: 10,
-              right: 10,
-              child: GestureDetector(
+              GestureDetector(
                 onTap: () {
                   getUpdateCartData(
                       context, item.product!.id, 0)
                       .then((value) async {
-                    bottomNavController.getData();
+                    _cartController.getData();
                     if (value.status) {
                       showToast(value.message);
                       setState(() {
@@ -430,7 +423,6 @@ class CartScreenState extends State<CartScreen> {
                     } else {
                       Helpers.createSnackBar(context, value.message.toString());
                     }
-                    return;
                   });
                 },
                 child: const Icon(
@@ -438,8 +430,10 @@ class CartScreenState extends State<CartScreen> {
                   size: 28,
                   color: AppTheme.newprimaryColor,
                 ),
-              ))
-        ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -1,11 +1,10 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
-
 import 'package:dinelah/routers/my_router.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/ModelHomeData.dart';
 import '../models/ModelLogIn.dart';
 import '../utils/ApiConstant.dart';
@@ -26,6 +25,8 @@ Future<ModelHomeData> getHomeData() async {
     HttpHeaders.contentTypeHeader: 'application/json',
     HttpHeaders.acceptHeader: 'application/json',
   };
+
+  log("aqwweerrr"+map.toString());
 
   http.Response response = await http.post(Uri.parse(ApiUrls.homeDataUrl),
       body: jsonEncode(map), headers: headers);

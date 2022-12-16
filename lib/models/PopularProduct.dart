@@ -145,7 +145,7 @@ class AttributeData {
     required this.name,
     required this.items,
   });
-  late final String name;
+  late final name;
   late final List<Items> items;
 
   AttributeData.fromJson(Map<String, dynamic> json) {
@@ -176,16 +176,16 @@ class Items {
     required this.isSelected,
   });
   late final dynamic termId;
-  late final String name;
-  late final String slug;
-  late final int termGroup;
-  late final int termTaxonomyId;
-  late final String taxonomy;
-  late final String description;
-  late final int parent;
-  late final int count;
-  late final String filter;
-  late final bool isSelected;
+  late final name;
+  late final slug;
+  late final termGroup;
+  late final termTaxonomyId;
+  late final taxonomy;
+  late final description;
+  late final parent;
+  late final count;
+  late final filter;
+  late final isSelected;
 
   Items.fromJson(Map<String, dynamic> json) {
     termId = json['term_id'];

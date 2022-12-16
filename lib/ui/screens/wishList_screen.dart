@@ -11,8 +11,8 @@ class MyWishList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final double itemHeight = screenSize.height / 3.4;
-    // final double itemWidth = screenSize.width / 2.1;
+    final double itemHeight = screenSize.height / 4;
+    final double itemWidth = screenSize.width / 2;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: RefreshIndicator(

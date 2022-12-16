@@ -83,7 +83,7 @@ AppBar buildAppBar(
                     ModelLogInData? user = ModelLogInData.fromJson(
                         jsonDecode(pref.getString('user')!));
 
-                    Get.off(CustomNavigationBar(
+                    Get.off(const CustomNavigationBar(
                       index: 4,
                     ));
                   } else {
@@ -97,7 +97,7 @@ AppBar buildAppBar(
                       height: 34,
                       width: 34,
                       clipBehavior: Clip.antiAlias,
-                      margin: EdgeInsets.all(2),
+                      margin: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           color: Colors.brown),

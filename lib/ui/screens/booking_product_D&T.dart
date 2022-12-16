@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../controller/CartController.dart';
 import '../../res/app_assets.dart';
 
 class BookingProductWithCalender extends StatefulWidget {
@@ -83,7 +84,7 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
         ),
       ),
       child: Scaffold(
-        appBar: backAppBar('Booking Product'),
+        appBar: backAppBar(''),
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           child: Obx(() {
@@ -124,6 +125,8 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
                   }
                 }
               }
+
+              print(mList.toString());
             }
             return !controller.isDataLoading.value
                 ? loader(context)
@@ -164,7 +167,7 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
                             //     ?
                             // controller.model.value.data!.durationType=="customer" ||
                             //    controller.model.value.data!.durationUnit=="month" ?
-                            controller.model.value.data!.durationUnit!="month" ?
+                            if(controller.model.value.data!.durationUnit != "month")
                             TableCalendar(
                               firstDay: DateTime(2010),
                               lastDay: DateTime(2030),
@@ -230,81 +233,85 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
                                     color: AppTheme.primaryColor,
                                     shape: BoxShape.circle),
                               ),
-                            ) :
-                            Padding(
+                            ),
+
+
+                            if(
+                            // controller.model.value.data!.durationType == "customer"  &&
+                                controller.model.value.data!.durationUnit == "month" || controller.model.value.data!.durationUnit == "day")
+                              Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 12),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  if(controller.model.value.data!.durationType=="customer" || controller.model.value.data!.durationUnit == "month")
                                   const Text('Duration:'),
                                   addHeight(4.0),
                                   if(controller.model.value.data!.durationType=="customer")
-                                  CommonTextFieldWidgetForm(
-                                    hint: 'Enter Month(s)',
-                                    controller: durationController,
-                                  ),
-                                  addHeight(20.0),
-                                  if(controller.model.value.data!.durationUnit!="month")
-                                  GridView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                    const NeverScrollableScrollPhysics(),
-                                    gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4,
-                                      childAspectRatio: 2.0,
-                                      mainAxisSpacing: 8.0,
-                                      crossAxisSpacing: 10.0,
+                                    CommonTextFieldWidgetForm(
+                                      hint: 'Enter ${controller.model.value.data!.durationUnit}(s)',
+                                      controller: durationController,
                                     ),
-                                    itemBuilder: (_, index) {
-                                      // return timeSlot(mList, index);
-                                      return GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            selectedtime = index;
-                                            dateYearMonth= "${controller.model.value.data!.availableDates![index].value}";
-                                            print("object:::$dateYearMonth");
-                                            // selectedtim = mList[index].time.toString();
-                                          });
-                                        },
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                              color: selectedtime != index
-                                                  ? Colors.grey.shade200
-                                                  : Colors.red,
-                                              borderRadius: const BorderRadius.all(Radius.circular(50)),
-                                            ),
-                                            child: Center(
-                                                child: Text(
-                                                  controller.model.value.data!.availableDates![index].valueText.toString(),
-                                                  style: TextStyle(
-                                                      color: selectedtime != index
-                                                          ? AppTheme.textColorDarkBLue
-                                                          : Colors.white,
-                                                      fontSize: 14,
-                                                      fontWeight: FontWeight.bold),
-                                                ))),
-                                      );
-                                    },
-                                    // itemCount: mList.length,
-                                    itemCount: controller
-                                        .model.value.data!.availableDates!.length,
-                                  ),
+                                  addHeight(20.0),
+                                  if(controller.model.value.data!.durationUnit == "month")
+                                    GridView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                      const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4,
+                                        childAspectRatio: 2.0,
+                                        mainAxisSpacing: 8.0,
+                                        crossAxisSpacing: 10.0,
+                                      ),
+                                      itemBuilder: (_, index) {
+                                        // return timeSlot(mList, index);
+                                        return GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              selectedtime = index;
+                                              dateYearMonth= "${controller.model.value.data!.availableDates![index].value}";
+                                              print("object:::$dateYearMonth");
+                                              // selectedtim = mList[index].time.toString();
+                                            });
+                                          },
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                color: selectedtime != index
+                                                    ? Colors.grey.shade200
+                                                    : Colors.red,
+                                                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                                              ),
+                                              child: Center(
+                                                  child: Text(
+                                                    controller.model.value.data!.availableDates![index].valueText.toString(),
+                                                    style: TextStyle(
+                                                        color: selectedtime != index
+                                                            ? AppTheme.textColorDarkBLue
+                                                            : Colors.white,
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.bold),
+                                                  ))),
+                                        );
+                                      },
+                                      // itemCount: mList.length,
+                                      itemCount: controller
+                                          .model.value.data!.availableDates!.length,
+                                    ),
                                 ],
                               ),
                             ),
-                            Padding(
+
+
+
+                            /*Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16.0, vertical: 12),
                               child: Container(
-                                child:
-                                    controller.model.value.data!.durationType == 'fixed'
+                                child: controller.model.value.data!.durationType == 'fixed'
                                         ? SizedBox(
-                                            // height: MediaQuery.of(context)
-                                            //         .size
-                                            //         .height *
-                                            //     0.60,
                                             child: mList.length > 1
                                                 ? GridView.builder(
                                                     shrinkWrap: true,
@@ -496,7 +503,215 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
                                             ),
                                           ),
                               ),
+                            ),*/
+
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 12),
+                              child: Column(
+                                children: [
+                                  if(controller.model.value.data!.durationType == 'fixed'
+                                      && controller.model.value.data!.durationUnit != "day"
+                                  )
+                                    SizedBox(
+                                      child: GridView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                        const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 4,
+                                          childAspectRatio: 2.0,
+                                          mainAxisSpacing: 8.0,
+                                          crossAxisSpacing: 10.0,
+                                        ),
+                                        itemBuilder: (_, index) {
+                                          return timeSlot(
+                                              mList, index);
+                                        },
+                                        itemCount: mList.length,
+                                      ),
+                                    ),
+                                  if((controller.model.value.data!.durationType != 'fixed') && (controller.model.value.data!.durationUnit == "hour" || controller.model.value.data!.durationUnit == "minute"))
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment
+                                          .spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            const Text('Start Time'),
+                                            addHeight(10),
+                                            Container(
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    width: 0.5,
+                                                    color: Colors.grey),
+                                              ),
+                                              child: mListTime.isEmpty
+                                                  ? const Padding(
+                                                padding: EdgeInsets
+                                                    .symmetric(
+                                                    horizontal:
+                                                    8.0),
+                                                child: Center(
+                                                    child: Text(
+                                                      'Sorry, we don\'t\nhave time slot of today',
+                                                      textAlign:
+                                                      TextAlign
+                                                          .center,
+                                                    )),
+                                              )
+                                                  : DropdownButtonHideUnderline(
+                                                child:
+                                                DropdownButton(
+                                                    style:
+                                                    const TextStyle(
+                                                      fontSize:
+                                                      15,
+                                                      color: Colors
+                                                          .black,
+                                                    ),
+                                                    value:
+                                                    startTimeSlug,
+                                                    items: mListTime.map(
+                                                            (String
+                                                        items) {
+                                                          return DropdownMenuItem(
+                                                              value:
+                                                              items,
+                                                              child:
+                                                              Container(
+                                                                width: screenSize.width * 0.30,
+                                                                padding: const EdgeInsets.all(8.0),
+                                                                child: Text(items,
+                                                                    style: const TextStyle(
+                                                                      fontSize: 16,
+                                                                    )),
+                                                              ));
+                                                        }).toList(),
+                                                    onChanged:
+                                                        (String?
+                                                    newValue) {
+                                                      setState(
+                                                              () {
+                                                            startTimeSlug =
+                                                            newValue!;
+                                                          });
+                                                      controller
+                                                          .mListEndTime
+                                                          .clear();
+
+                                                      controller.context =
+                                                          context;
+                                                      controller.getBookableEndDateData(
+                                                          Get.arguments[0],
+                                                          yearSlug.toString(),
+                                                          monthSlug.toString(),
+                                                          daySlug.toString(),
+                                                          newValue);
+                                                    }),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        addWidth(12),
+                                        Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            const Text('End Time'),
+                                            addHeight(10),
+                                            Container(
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    width: 0.5,
+                                                    color: Colors.grey),
+                                              ),
+                                              child: !controller
+                                                  .isEndDataLoading
+                                                  .value
+                                                  ? const Padding(
+                                                padding: EdgeInsets
+                                                    .symmetric(
+                                                    vertical:
+                                                    8.0,
+                                                    horizontal:
+                                                    38),
+                                                child:
+                                                CupertinoActivityIndicator(),
+                                              )
+                                                  : controller.mListEndTime
+                                                  .isEmpty &&
+                                                  controller
+                                                      .mListEndTime
+                                                      .length >
+                                                      1
+                                                  ? const SizedBox
+                                                  .shrink()
+                                                  : DropdownButtonHideUnderline(
+                                                child: DropdownButton(
+                                                    style: const TextStyle(
+                                                      fontSize:
+                                                      15,
+                                                      color: Colors
+                                                          .black,
+                                                    ),
+                                                    value: controller.dropdownEndTimeValue.value,
+                                                    items: controller.mListEndTime.map((String items) {
+                                                      return DropdownMenuItem(
+                                                        value:
+                                                        items,
+                                                        child: Container(
+                                                            width: screenSize.width * 0.30,
+                                                            padding: const EdgeInsets.all(8.0),
+                                                            child: Text(
+                                                              items,
+                                                              style: const TextStyle(fontSize: 16),
+                                                            )),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (String? newValue) {
+                                                      setState(
+                                                              () {
+                                                            controller
+                                                                .dropdownEndTimeValue
+                                                                .value = newValue!;
+                                                          });
+                                                    }),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16.0, vertical: 12),
@@ -618,13 +833,14 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
                                     debugPrint(
                                         ":::::::::endTimeSlug:::=>${controller.dropdownEndTimeValue}");
 
-                                    if (controller.model.value.data!.durationType == 'fixed' && selectedtim == null) {
+                                    if (false) {
                                       getAlertDialog('Add Cart',
                                           'Please check your time slot.\nMight be you don\'t have time slot for selected date',
                                           () {
                                         Get.back();
                                       });
-                                    } else {
+                                    } else
+                                    {
                                       getBookableAddToCartData(
                                               context,
                                               Get.arguments[0].toString(),
@@ -649,9 +865,8 @@ class BookingProductWithCalenderState extends State<BookingProductWithCalender> 
                                       )
                                           .then((value) {
                                         if (value.status) {
-                                          final bottomNavController =
-                                              Get.put(BottomNavController());
-                                          bottomNavController.getData();
+                                          final CartController cartController = Get.put(CartController());
+                                          cartController.getData();
                                           showToast(value.message);
                                           Get.offAllNamed(
                                               MyRouter.customBottomBar);

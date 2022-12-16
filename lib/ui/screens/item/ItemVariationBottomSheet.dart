@@ -9,6 +9,8 @@ import 'package:dinelah/utils/ApiConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controller/CartController.dart';
+
 class ItemVariationBottomSheet extends StatefulWidget {
   final ModelProduct popularProducts;
   const ItemVariationBottomSheet(this.popularProducts, {Key? key})
@@ -22,7 +24,7 @@ class ItemVariationBottomSheet extends StatefulWidget {
 class ItemVariationBottomSheetState extends State<ItemVariationBottomSheet> {
   int productQuantity = 1;
 
-  final bottomNavController = Get.put(BottomNavController());
+  // final bottomNavController = Get.put(BottomNavController());
   var selectedAttributes = RxList<ModelAllAttributesReq>.empty();
   @override
   Widget build(BuildContext context) {
@@ -138,11 +140,12 @@ class ItemVariationBottomSheetState extends State<ItemVariationBottomSheet> {
                                     '$productQuantity',
                                     selectedAttributes.value)
                                 .then((value) {
+                              final CartController _cartController = Get.put(CartController());
                               showToast(value.message);
                               if (value.status) {
                                 increment();
+                                _cartController.getData();
                               }
-                              return null;
                             });
                           },
                           child: Container(
@@ -164,14 +167,13 @@ class ItemVariationBottomSheetState extends State<ItemVariationBottomSheet> {
                         buttonWidth: 60,
                         text: 'ADD TO CART',
                         onTap: () {
+                          final CartController _cartController = Get.put(CartController());
                           getUpdateCartVariationData(context, popularProduct.id,
                                   '$productQuantity', selectedAttributes.value)
                               .then((value) {
-                            bottomNavController.getData();
+                            _cartController.getData();
                             showToast(value.message);
                             if (value.status) {
-                              ++bottomNavController.cartBadgeCount.value;
-                              // Get.back();
                               Get.back();
                             }
                             return null;

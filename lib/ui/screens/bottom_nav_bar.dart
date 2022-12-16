@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../controller/CartController.dart';
 import '../../res/app_assets.dart';
 import '../widget/drawer.dart';
 import 'all_hosts.dart';
@@ -32,34 +33,35 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
   final controller =
       Get.put(CustomNavigationBarController());
 
-  final bottomNavController = Get.put(BottomNavController());
+  // final bottomNavController = Get.put(BottomNavController());
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   int _selectedIndex = 0;
 
   String title = '';
-
-  @override
-  void dispose() {
-    super.dispose();
-    bottomNavController.onClose();
-  }
+  //
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   bottomNavController.onClose();
+  // }
+  final CartController _cartController = Get.put(CartController());
 
   @override
   void initState() {
     super.initState();
-    bottomNavController.getData();
+    // bottomNavController.getData();
     setState(() {
       _selectedIndex = widget.index;
     });
   }
 
-  updateCartBadgeCount() {
-    setState(() {
-      ++bottomNavController.cartBadgeCount.value;
-    });
-  }
+  // updateCartBadgeCount() {
+  //   setState(() {
+  //     ++bottomNavController.cartBadgeCount.value;
+  //   });
+  // }
 
   final List<Widget> _widgetOptions = <Widget>[
     AllHostsScreen(),
@@ -86,6 +88,7 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
           title = 'All Hosts';
           break;
         case 1:
+          _cartController.getData();
           title = 'My cart';
           break;
         case 2:
@@ -103,12 +106,13 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     bool keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xfff3f3f3),
+        // color: Color(0xfff3f3f3),
         image: DecorationImage(
           image: AssetImage(
             AppAssets.dashboardBg,
@@ -116,6 +120,18 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
           alignment: Alignment.topRight,
           fit: BoxFit.contain,
         ),
+        gradient: LinearGradient(
+            colors: [
+          Color(0xfff3f3f3),
+          Color(0xfff3f3f3),
+          Color(0xfff3f3f3),
+          Color(0xfff3f3f3),
+          Colors.white
+        ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter
+        )
+          // color: Color(0xfff3f3f3),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -127,72 +143,83 @@ class CustomNavigationBarState extends State<CustomNavigationBar> {
           _scaffoldKey,
           _selectedIndex,
         ),
-        bottomNavigationBar: BottomAppBar(
-            shape: const CircularNotchedRectangle(),
-            notchMargin: 8.0,
-            clipBehavior: Clip.antiAlias,
-            child: BottomNavigationBar(
-                items: [
-                  const BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.storefront_outlined,
-                        size: 24,
-                      ),
-                      label: ''),
-                  BottomNavigationBarItem(
-                      icon: Padding(
-                          padding: const EdgeInsets.only(right: 12.0),
-                          child: Badge(
-                            toAnimate: true,
-                            badgeContent: Obx(() {
-                              return Text(
-                                bottomNavController.cartBadgeCount.toString(),
-                                style: const TextStyle(color: Colors.white),
-                              );
-                            }),
-                            child: const Icon(
-                              Icons.shopping_cart_outlined,
+        bottomNavigationBar: SafeArea(
+          minimum: EdgeInsets.zero,
+          top: false,
+          child: SizedBox(
+            height: 56,
+            child: BottomAppBar(
+              color: Colors.transparent,
+              elevation: 0,
+                shape: const CircularNotchedRectangle(),
+                notchMargin: 8.0,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                child: BottomNavigationBar(
+                    items: [
+                      const BottomNavigationBarItem(
+                          icon: Icon(
+                            Icons.storefront_outlined,
+                            size: 24,
+                          ),
+                          label: ''),
+                      BottomNavigationBarItem(
+                          icon: Padding(
+                              padding: const EdgeInsets.only(right: 12.0),
+                              child: Badge(
+                                toAnimate: true,
+                                badgeContent: Obx(() {
+                                  return Text(
+                                    _cartController.isDataLoading.value ?
+                                    _cartController.model.value.data!.items.length.toString() : "0",
+                                    style: const TextStyle(color: Colors.white),
+                                  );
+                                }),
+                                child: const Icon(
+                                  Icons.shopping_cart_outlined,
+                                  size: 24,
+                                ),
+                              )),
+                          label: ''),
+                      const BottomNavigationBarItem(
+                          icon: Icon(
+                            Icons.person_outline,
+                            size: 24,
+                            color: Colors.transparent,
+                          ),
+                          label: ''),
+                      const BottomNavigationBarItem(
+                          icon: Padding(
+                            padding: EdgeInsets.only(left: 12.0),
+                            child: Icon(
+                              Icons.favorite_border,
                               size: 24,
                             ),
-                          )),
-                      label: ''),
-                  const BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.person_outline,
-                        size: 24,
-                        color: Colors.transparent,
-                      ),
-                      label: ''),
-                  const BottomNavigationBarItem(
-                      icon: Padding(
-                        padding: EdgeInsets.only(left: 12.0),
-                        child: Icon(
-                          Icons.favorite_border,
-                          size: 24,
-                        ),
-                      ),
-                      label: ''),
-                  const BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.person_outline,
-                        size: 24,
-                      ),
-                      label: ''),
-                ],
-                type: BottomNavigationBarType.fixed,
-                currentIndex: _selectedIndex,
-                selectedItemColor: AppTheme.primaryColor,
-                iconSize: 40,
-                onTap: _onItemTapped,
-                elevation: 5)),
+                          ),
+                          label: ''),
+                      const BottomNavigationBarItem(
+                          icon: Icon(
+                            Icons.person_outline,
+                            size: 24,
+                          ),
+                          label: ''),
+                    ],
+                    backgroundColor: Colors.white,
+                    type: BottomNavigationBarType.fixed,
+                    currentIndex: _selectedIndex,
+                    selectedItemColor: AppTheme.primaryColor,
+                    iconSize: 40,
+                    onTap: _onItemTapped,
+                    elevation: 4)
+            ),
+          ),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Visibility(
           visible: !keyboardIsOpened,
           child: FloatingActionButton(
             child: Image.asset(AppAssets.homeBottomNav),
             onPressed: () {
-              bottomNavController.getData();
-              // updateCartBadgeCount();
+              _cartController.getData();
               setState(() {
                 title = '';
                 _selectedIndex = 2;

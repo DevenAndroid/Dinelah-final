@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../controller/CartController.dart';
 import '../../res/app_assets.dart';
 import '../../res/theme/theme.dart';
 import '../widget/common_widget.dart';
@@ -26,7 +27,7 @@ class CheckoutState extends State<Checkout> {
 
   RxBool isDataLoad = false.obs;
 
-  final bottomNavController = Get.put(BottomNavController());
+  final CartController _cartController = Get.put(CartController());
 
   getLoadPrefs() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -48,7 +49,7 @@ class CheckoutState extends State<Checkout> {
     String webUrl = "${"${ApiUrls.domainName}checkout/?cookie=" + cookie}&appchekout=yes";
     return WillPopScope(
       onWillPop: () async {
-        bottomNavController.getData();
+        _cartController.getData();
         return true;
       },
       child: Container(

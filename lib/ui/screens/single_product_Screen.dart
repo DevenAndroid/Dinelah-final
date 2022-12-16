@@ -13,6 +13,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../controller/CartController.dart';
 import '../../res/app_assets.dart';
 
 import 'package:flutter_html/flutter_html.dart';
@@ -28,13 +29,14 @@ class SingleProductScreenState extends State<SingleProductScreen> {
   bool value = false;
   int productQuantity = 1;
 
-  final bottomNavController = Get.put(BottomNavController());
+  final CartController _cartController = Get.put(CartController());
+
   late ModelProduct model;
   @override
   void initState() {
     super.initState();
 
-    bottomNavController.getData();
+    // bottomNavController.getData();
     model = Get.arguments[0];
   }
 
@@ -85,10 +87,10 @@ class SingleProductScreenState extends State<SingleProductScreen> {
                                   ),
                                 ),
                               ),
-                              placeholder: (context, url) => Container(
+                              placeholder: (context, url) => const SizedBox(
                                   height: 4,
                                   width: 4,
-                                  child: const CircularProgressIndicator(
+                                  child: CircularProgressIndicator(
                                     color: AppTheme.primaryColor,
                                   )),
                               errorWidget: (context, url, error) =>
@@ -309,10 +311,8 @@ class SingleProductScreenState extends State<SingleProductScreen> {
                                     .then((value) {
                                       showToast(value.message);
                                   if (value.status) {
-                                    bottomNavController.getData();
+                                    _cartController.getData();
                                     Get.back();
-                                    // Helpers.createSnackBar(
-                                    //     context, value.message.toString());
                                   }
                                   return null;
                                 });

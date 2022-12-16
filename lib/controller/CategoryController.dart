@@ -13,8 +13,40 @@ class CategoryController extends GetxController {
   RxBool isDataLoading = false.obs;
   RxBool isCategorySelected = false.obs;
 
+  String categoryId = "";
+
   final currentIndex = 0.obs;
   final currentIndex1 = 0.obs;
+
+
+  int perPage = 10;
+  int pageCount = 1;
+  bool loadingPagination = false;
+  RxBool allLoaded = false.obs;
+  String storeId = "";
+
+
+  Future<dynamic> getMoreProducts(context) async {
+    if(!allLoaded.value) {
+      if (loadingPagination == false) {
+        loadingPagination = true;
+        await getCategoryProductData(
+            categoryId,
+            perPage: perPage,
+            pageCount: pageCount,
+            context: context).then((value1) {
+          loadingPagination = false;
+          if (value1.data!.products.isNotEmpty) {
+            model.value.data!.products.addAll(value1.data!.products);
+            return pageCount++;
+          }
+          else {
+            return allLoaded.value = true;
+          }
+        });
+      }
+    }
+  }
 
   final productQuantity = 1.obs;
   increment() {
@@ -29,19 +61,25 @@ class CategoryController extends GetxController {
     }
   }
 
-  void getProduct(id) {
-    getCategoryProductData(id).then((value) {
+  void getProduct() {
+    isDataLoading.value = false;
+    pageCount = 1;
+    allLoaded.value = false;
+    loadingPagination = false;
+    getCategoryProductData(categoryId,perPage: perPage,pageCount: pageCount).then((value) {
       isDataLoading.value = true;
       model.value = value;
-      return null;
+      if(value.data!.products.isNotEmpty){
+        pageCount++;
+      }
     });
   }
 
-  void getCategory() {
-    getCategoryData().then((value) {
-      isDataLoading.value = true;
-      catModel.value = value;
-      return null;
-    });
-  }
+  // void getCategory() {
+  //   getCategoryData().then((value) {
+  //     isDataLoading.value = true;
+  //     catModel.value = value;
+  //     return null;
+  //   });
+  // }
 }

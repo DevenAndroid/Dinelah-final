@@ -269,7 +269,8 @@ class _MyAppState extends State<MyApp> {
                 ),
                 colorScheme: ColorScheme.fromSwatch()
                     .copyWith(secondary: AppTheme.primaryColor)
-                    .copyWith(secondary: AppTheme.primaryColor)),
+                    .copyWith(secondary: AppTheme.primaryColor)
+            ),
           );
         });
       }),

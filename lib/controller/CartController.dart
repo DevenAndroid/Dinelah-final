@@ -16,7 +16,7 @@ class CartController extends GetxController {
   getData() async {
     getCartData().then((value) {
       isDataLoading.value = true;
-      model.value = value as ModelGetCartData;
+      model.value = value;
       return null;
     });
   }

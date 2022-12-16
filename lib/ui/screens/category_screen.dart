@@ -1,7 +1,6 @@
 import 'package:dinelah/controller/CategoryController.dart';
 import 'package:dinelah/controller/SearchController.dart';
 import 'package:dinelah/models/ModelHomeData.dart';
-import 'package:dinelah/repositories/category_repository.dart';
 import 'package:dinelah/res/theme/theme.dart';
 import 'package:dinelah/routers/my_router.dart';
 import 'package:dinelah/ui/screens/item/ItemProduct.dart';
@@ -9,8 +8,6 @@ import 'package:dinelah/ui/widget/common_widget.dart';
 import 'package:dinelah/utils/ApiConstant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../repositories/get_category_products.dart';
 import '../../res/app_assets.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -21,14 +18,26 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class CategoryScreenState extends State<CategoryScreen> {
-
   final scrollController = ScrollController();
   List<Categories>? categories;
   final _categoryController = Get.put(CategoryController());
   final searchController = TextEditingController();
 
   var tappedIndex;
-  int termId = Get.arguments[1];
+  // int termId = Get.arguments[1];
+
+  ScrollController scrollController1 = ScrollController();
+
+  scrollListener() {
+    scrollController1.addListener(() {
+      if (scrollController1.position.maxScrollExtent ==
+          scrollController1.position.pixels) {
+        _categoryController.getMoreProducts(context).then((value) {
+          setState(() {});
+        });
+      }
+    });
+  }
 
   @override
   void deactivate() {
@@ -41,25 +50,30 @@ class CategoryScreenState extends State<CategoryScreen> {
   @override
   void initState() {
     super.initState();
+    _categoryController.categoryId = Get.arguments[1].toString();
+    print(_categoryController.categoryId);
+    scrollListener();
 
     categories = Get.arguments[0];
-    _categoryController.getProduct(Get.arguments[1]);
+    _categoryController.getProduct();
 
-    if (Get.arguments[0] == null) {
-      getCategoryData();
-    }
     Future.delayed(const Duration(seconds: 1)).then((value) async {
-    _animateToIndex(Get.arguments[2]);
+      _animateToIndex(Get.arguments[2]);
     });
-
   }
 
   void _animateToIndex(int index) {
     scrollController.animateTo(
-      index*150.0,
-      duration: Duration(seconds: 2),
+      index * 150.0,
+      duration: const Duration(seconds: 2),
       curve: Curves.fastOutSlowIn,
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController1.dispose();
   }
 
   @override
@@ -84,46 +98,45 @@ class CategoryScreenState extends State<CategoryScreen> {
           backgroundColor: Colors.transparent,
           body: Obx(() {
             return SizedBox(
-                    width: screenSize.width,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, right: 16.0, top: 4.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          searchView(context, () {
-                            applySearch(context);
-                          }, searchController),
-                          addHeight(20),
-                          SizedBox(
-                            height: 48,
-                            child: ListView.builder(
-                              controller: scrollController,
-                                itemCount: categories!.length,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  return categoryList(categories, index);
-                                }),
-                          ),
-                          addHeight(20),
-                          !_categoryController.isDataLoading.value ?
-                              SizedBox(
-                                height: 200,
-                                  child: loader(context)):
-                          Expanded(
+              width: screenSize.width,
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(left: 16.0, right: 16.0, top: 4.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    searchView(context, () {
+                      applySearch(context);
+                    }, searchController),
+                    addHeight(20),
+                    SizedBox(
+                      height: 48,
+                      child: ListView.builder(
+                          controller: scrollController,
+                          itemCount: categories!.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return categoryList(categories, index);
+                          }),
+                    ),
+                    addHeight(20),
+                    !_categoryController.isDataLoading.value
+                        ? SizedBox(height: 200, child: loader(context))
+                        : Expanded(
                             child: GridView.builder(
                                 itemCount: _categoryController
                                     .model.value.data!.products.length,
+                                controller: scrollController1,
                                 gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                   crossAxisSpacing: 12.0,
                                   mainAxisSpacing: 12.0,
                                   mainAxisExtent: 234,
                                   // childAspectRatio:
-                                      // MediaQuery.of(context).size.width /
-                                      //     (MediaQuery.of(context).size.height /
-                                      //         1.76),
+                                  // MediaQuery.of(context).size.width /
+                                  //     (MediaQuery.of(context).size.height /
+                                  //         1.76),
                                 ),
                                 itemBuilder: (context, index) {
                                   return ItemProduct(
@@ -135,11 +148,17 @@ class CategoryScreenState extends State<CategoryScreen> {
                                       false);
                                 }),
                           ),
-                          addHeight(10),
-                        ],
-                      ),
-                    ),
-                  );
+                    addHeight(10),
+                    if (_categoryController.allLoaded.value)
+                      const Center(
+                          child: Padding(
+                        padding: EdgeInsets.only(bottom: 5),
+                        child: Text("No More Products"),
+                      ))
+                  ],
+                ),
+              ),
+            );
           }),
         ));
   }
@@ -150,22 +169,19 @@ class CategoryScreenState extends State<CategoryScreen> {
         _animateToIndex(index);
         setState(() {
           tappedIndex = index;
-          termId = categories![index].termId;
-          _categoryController.isDataLoading.value = false;
-          getCategoryProductData(categories[index].termId)
-              .then((value) {
-            _categoryController.isDataLoading.value = true;
-                return _categoryController.model.value = value;
-              });
+          _categoryController.categoryId = categories![index].termId.toString();
+          _categoryController.getProduct();
         });
       },
       child: Container(
           margin: const EdgeInsets.only(right: 10),
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-              color:
-              termId == categories![index].termId ||
-              tappedIndex == index ? Colors.black : AppTheme.colorWhite,
+              color: _categoryController.categoryId ==
+                          categories![index].termId.toString() ||
+                      tappedIndex == index
+                  ? Colors.black
+                  : AppTheme.colorWhite,
               borderRadius: BorderRadius.circular(6)),
           child: Row(
             children: [
@@ -207,9 +223,9 @@ class CategoryScreenState extends State<CategoryScreen> {
               Text(
                 categories[index].name.toString(),
                 style: TextStyle(
-                    color:
-                    termId == categories[index].termId ||
-                    tappedIndex == index
+                    color: _categoryController.categoryId ==
+                                categories[index].termId.toString() ||
+                            tappedIndex == index
                         ? AppTheme.colorWhite
                         : AppTheme.textColorDarkBLue,
                     fontSize: 16,

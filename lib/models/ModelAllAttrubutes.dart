@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 
 class ModelAllAttributesReq {
-  String? name;
+  dynamic name;
   RxString? currentIndex;
-  int? termId;
+  dynamic termId;
   ModelAllAttributesReq(this.name, this.currentIndex, this.termId);
 
   ModelAllAttributesReq.fromJson(Map<String, dynamic> json) {
