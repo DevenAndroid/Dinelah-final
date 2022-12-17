@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dinelah/models/ModelLogIn.dart';
@@ -15,7 +16,6 @@ Future<ModelGetCartData> getCartData() async {
 
    var map = <String, dynamic>{};
    SharedPreferences pref = await SharedPreferences.getInstance();
-   // ModelLogInData? user = ModelLogInData.fromJson(jsonDecode(pref.getString('user')!));
    map['cookie'] = pref.getString('user')!=null ? ModelLogInData.fromJson(jsonDecode(pref.getString('user')!)).cookie : pref.getString('deviceId');
 
 
@@ -26,6 +26,8 @@ Future<ModelGetCartData> getCartData() async {
 
   http.Response response = await http.post(Uri.parse(ApiUrls.getCartUrl),
       body: jsonEncode(map), headers: headers);
+
+  log("Cart API Response...  ${response.body}");
 
   if (response.statusCode == 200) {
     return ModelGetCartData.fromJson(json.decode(response.body));

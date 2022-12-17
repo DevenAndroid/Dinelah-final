@@ -88,118 +88,123 @@ class CartScreenState extends State<CartScreen> {
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height*0.50,
-                        child: ListView.builder(
-                              itemCount: _cartController.model.value.data!.items.length,
-                              // itemCount: 50,
-                              scrollDirection: Axis.vertical,
-                              physics: const ScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return orderCard(
-                                  _cartController.model.value.data!.items,
-                                  index,
-                                );
-                              }
-                              ),
-                      ),
-                      Positioned(
-                        bottom: 8,
-                        right: 0,
-                        left: 0,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                      Column(
+                        children: [
+                          Expanded(
+                            // height: MediaQuery.of(context).size.height*0.50,
+                            child: ListView.builder(
+                                  itemCount: _cartController.model.value.data!.items.length,
+                                  // itemCount: 50,
+                                  scrollDirection: Axis.vertical,
+                                  physics: const ScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return orderCard(
+                                      _cartController.model.value.data!.items,
+                                      index,
+                                    );
+                                  }
+                                  ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                addHeight(10),
-                                _getPaymentDetails(
-                                    'Subtotal:',
-                                    _cartController.model.value.data!
-                                        .cartmeta.currencySymbol +
-                                        _cartController.model.value
-                                            .data!.cartmeta.subtotal),
-                                addHeight(8),
-                                _getPaymentDetails(
-                                    'Tax and fee:',
-                                    _cartController.model.value.data!
-                                        .cartmeta.currencySymbol +
-                                        (double.parse(_cartController
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  addHeight(10),
+                                  _getPaymentDetails(
+                                      'Subtotal:',
+                                      _cartController.model.value.data!
+                                          .cartmeta.currencySymbol +
+                                          _cartController.model.value
+                                              .data!.cartmeta.subtotal),
+                                  addHeight(8),
+                                  _getPaymentDetails(
+                                      'Tax and fee:',
+                                      _cartController.model.value.data!
+                                          .cartmeta.currencySymbol +
+                                          (double.parse(_cartController
+                                              .model
+                                              .value
+                                              .data!
+                                              .cartmeta
+                                              .shippingTotal) +
+                                              double.parse(
+                                                  _cartController
+                                                      .model
+                                                      .value
+                                                      .data!
+                                                      .cartmeta
+                                                      .totalTax))
+                                              .toStringAsFixed(2)),
+                                  addHeight(8),
+                                  _getPaymentDetails(
+                                      'Delivery:', 'Free'),
+                                  addHeight(8),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        'Total:',
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                            AppTheme.primaryColor),
+                                      ),
+                                      Text(
+                                        _cartController
                                             .model
                                             .value
                                             .data!
                                             .cartmeta
-                                            .shippingTotal) +
-                                            double.parse(
-                                                _cartController
-                                                    .model
-                                                    .value
-                                                    .data!
-                                                    .cartmeta
-                                                    .totalTax))
-                                            .toStringAsFixed(2)),
-                                addHeight(8),
-                                _getPaymentDetails(
-                                    'Delivery:', 'Free'),
-                                addHeight(8),
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      'Total:',
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                          color:
-                                          AppTheme.primaryColor),
-                                    ),
-                                    Text(
-                                      _cartController
-                                          .model
-                                          .value
-                                          .data!
-                                          .cartmeta
-                                          .currencySymbol +
-                                          _cartController.model.value
-                                              .data!.cartmeta.total
-                                              .toString(),
-                                      style: const TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                                addHeight(14),
-                                CommonButton(
-                                    buttonHeight: 6.4,
-                                    buttonWidth: 100,
-                                    text: 'Checkout',
-                                    onTap: () async {
-                                      SharedPreferences pref = await SharedPreferences
-                                          .getInstance();
-                                      if (pref.getString('user') != null) {
-                                        Get.toNamed(MyRouter.checkoutScreen,
-                                            arguments: [
-                                              _cartController.model.value.data!.cartmeta.currencySymbol,
-                                            ]);
-                                      } else {
-                                        Get.toNamed(MyRouter.logInScreen);
-                                      }
-                                    },
-                                    mainGradient: AppTheme
-                                        .primaryGradientColor),
-                                addHeight(10),
-                              ],
+                                            .currencySymbol +
+                                            _cartController.model.value
+                                                .data!.cartmeta.total
+                                                .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                  addHeight(14),
+                                  CommonButton(
+                                      buttonHeight: 6.4,
+                                      buttonWidth: 100,
+                                      text: 'Checkout',
+                                      onTap: () async {
+                                        SharedPreferences pref = await SharedPreferences
+                                            .getInstance();
+                                        if (pref.getString('user') != null) {
+                                          Get.toNamed(MyRouter.checkoutScreen,
+                                              arguments: [
+                                                _cartController.model.value.data!.cartmeta.currencySymbol,
+                                              ]);
+                                        } else {
+                                          Get.toNamed(MyRouter.logInScreen);
+                                        }
+                                      },
+                                      mainGradient: AppTheme
+                                          .primaryGradientColor),
+                                  addHeight(10),
+                                ],
+                              ),
                             ),
-                          ),
-                        ),
+                          )
+                        ],
                       ),
+                      // Positioned(
+                      //   bottom: 8,
+                      //   right: 0,
+                      //   left: 0,
+                      //   child: ,
+                      // ),
                     ],
                   ),
             )
@@ -275,6 +280,7 @@ class CartScreenState extends State<CartScreen> {
                     addHeight(8),
                     Text(
                       item.product!.name,
+                      maxLines: 3,
                       style: const TextStyle(
                           color: AppTheme.textColorDarkBLue,
                           fontSize: 16.0,

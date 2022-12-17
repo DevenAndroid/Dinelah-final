@@ -150,7 +150,7 @@ class AttributeData {
 
   AttributeData.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    items = List.from(json['items']).map((e) => Items.fromJson(e)).toList();
+    items = json['items'] == null ? []: List.from(json['items']).map((e) => Items.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {

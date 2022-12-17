@@ -30,10 +30,10 @@ class ItemVariationBottomSheetState extends State<ItemVariationBottomSheet> {
   Widget build(BuildContext context) {
     ModelProduct popularProduct = widget.popularProducts;
     if (selectedAttributes.value.isEmpty) {
-      for (var item in popularProduct.attributeData) {
+      for (var item in popularProduct.attributeData!) {
         // for (var i = 0; i < item.items.length;) {
         selectedAttributes.value.add(ModelAllAttributesReq(
-            item.name.toString(), '0'.obs, item.items[0].termId));
+            item.name.toString(), '0'.obs, item.items![0].termId));
         // }
       }
     }
@@ -69,13 +69,13 @@ class ItemVariationBottomSheetState extends State<ItemVariationBottomSheet> {
               const Divider(),
               addHeight(8),
               ListView.builder(
-                  itemCount: popularProduct.attributeData.length,
+                  itemCount: popularProduct.attributeData!.length,
                   //snapshot.data!.data[0].attributes.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, index) {
                     return attributeList(
-                        popularProduct.attributeData[index],
-                        popularProduct.attributeData,
+                        popularProduct.attributeData![index],
+                        popularProduct.attributeData!,
                         index,
                         selectedAttributes);
                   }),
@@ -206,10 +206,10 @@ class ItemVariationBottomSheetState extends State<ItemVariationBottomSheet> {
         addHeight(10),
         ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: attributeData.items.length,
+            itemCount: attributeData.items!.length,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, index) {
-              return attributeOptionList(attributeData.items[index], index,
+              return attributeOptionList(attributeData.items![index], index,
                   attributeDatas, parentIndex, selectedAttributes);
             }),
       ],
