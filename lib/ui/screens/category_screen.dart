@@ -6,6 +6,7 @@ import 'package:dinelah/routers/my_router.dart';
 import 'package:dinelah/ui/screens/item/ItemProduct.dart';
 import 'package:dinelah/ui/widget/common_widget.dart';
 import 'package:dinelah/utils/ApiConstant.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../res/app_assets.dart';
@@ -24,7 +25,6 @@ class CategoryScreenState extends State<CategoryScreen> {
   final searchController = TextEditingController();
 
   var tappedIndex;
-  // int termId = Get.arguments[1];
 
   ScrollController scrollController1 = ScrollController();
 
@@ -42,7 +42,6 @@ class CategoryScreenState extends State<CategoryScreen> {
   @override
   void deactivate() {
     super.deactivate();
-
     _categoryController.onClose();
     searchController.clear();
   }
@@ -51,7 +50,9 @@ class CategoryScreenState extends State<CategoryScreen> {
   void initState() {
     super.initState();
     _categoryController.categoryId = Get.arguments[1].toString();
-    print(_categoryController.categoryId);
+    if (kDebugMode) {
+      print(_categoryController.categoryId);
+    }
     scrollListener();
 
     categories = Get.arguments[0];
@@ -74,6 +75,7 @@ class CategoryScreenState extends State<CategoryScreen> {
   void dispose() {
     super.dispose();
     scrollController1.dispose();
+    scrollController.dispose();
   }
 
   @override
@@ -107,7 +109,14 @@ class CategoryScreenState extends State<CategoryScreen> {
                   children: [
                     searchView(context, () {
                       applySearch(context);
-                    }, searchController),
+                    }, searchController,
+                      onSubmitted: (value){
+                        applySearch(context);
+                      },
+                      onSubmitted1: (){
+                        applySearch(context);
+                      }
+                    ),
                     addHeight(20),
                     SizedBox(
                       height: 48,
@@ -237,14 +246,15 @@ class CategoryScreenState extends State<CategoryScreen> {
   }
 
   void applySearch(BuildContext context) {
-    final controller = Get.put(SearchController());
-    controller.context = context;
+    // final controller = Get.put(SearchController());
     if (searchController.text.isEmpty) {
       showToast('Please enter something to search');
     } else {
-      Get.toNamed(MyRouter.searchProductScreen,
-          arguments: [searchController.text]);
       FocusManager.instance.primaryFocus?.unfocus();
+      // controller.searchKeyboard.value = searchController.text;
+      Get.offNamed(MyRouter.searchProductScreen,
+          arguments: [searchController.text]);
+      searchController.clear();
     }
   }
 }

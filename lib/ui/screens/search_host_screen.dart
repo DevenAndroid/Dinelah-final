@@ -100,7 +100,14 @@ class SearchHostProductState extends State<SearchHostProduct> {
                                             child:
                                             searchView(context, () {
                                               applySearch(context);
-                                            }, searchController),
+                                            }, searchController,
+                                                onSubmitted: (value){
+                                                  applySearch(context);
+                                                },
+                                                onSubmitted1: (){
+                                                  applySearch(context);
+                                                }
+                                            ),
                                             // TextField(
                                             //   maxLines: 1,
                                             //   controller: searchController,
@@ -307,7 +314,18 @@ class SearchHostProductState extends State<SearchHostProduct> {
                                               controller.searchKeyboard.value =
                                                   searchController.text;
                                               controller.getDataMap();
-                                            }, searchController),
+                                            }, searchController,
+                                                onSubmitted: (value){
+                                                  controller.searchKeyboard.value =
+                                                      searchController.text;
+                                                  controller.getDataMap();
+                                                },
+                                                onSubmitted1: (){
+                                                  controller.searchKeyboard.value =
+                                                      searchController.text;
+                                                  controller.getDataMap();
+                                                }
+                                            ),
                                           ),
                                           InkWell(
                                             onTap: () {

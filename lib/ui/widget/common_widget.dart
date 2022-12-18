@@ -10,7 +10,7 @@ import '../../res/theme/theme.dart';
 import '../../routers/my_router.dart';
 import '../screens/bottom_nav_bar.dart';
 
-Widget searchView(BuildContext context, onTap, searchController) {
+Widget searchView(BuildContext context, onTap, searchController,{onChanged,required onSubmitted, required onSubmitted1,}) {
   return SizedBox(
     height: 44,
     child: TextField(
@@ -19,13 +19,14 @@ Widget searchView(BuildContext context, onTap, searchController) {
       style: const TextStyle(fontSize: 17),
       textAlignVertical: TextAlignVertical.center,
       textInputAction: TextInputAction.search,
-      onSubmitted: (value) => onTap(),
+      onSubmitted: onSubmitted,
+      onChanged: onChanged,
       decoration: InputDecoration(
         filled: true,
         prefixIcon:
             Icon(Icons.search, color: Theme.of(context).iconTheme.color),
         suffixIcon: InkWell(
-            onTap: onTap,
+            onTap: onSubmitted1,
             child: Container(
               margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(

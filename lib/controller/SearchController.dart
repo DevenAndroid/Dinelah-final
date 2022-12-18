@@ -10,30 +10,42 @@ class SearchController extends GetxController {
   Rx<ModelAllAttributes> modelAttribute = ModelAllAttributes().obs;
   var mListProducts = List<ModelProduct>.empty(growable: true).obs;
   RxBool isDataLoading = false.obs;
-  RxString searchKeyboard = ''.obs;
+ final TextEditingController searchKeyboard = TextEditingController();
   RxString productType = ''.obs;
   RxString minPrice = ''.obs;
   RxString maxPrice = ''.obs;
   RxString rating = ''.obs;
   RxString sortBy = ''.obs;
 
-  BuildContext? context;
+  RxBool isSort = false.obs;
+
+  // BuildContext? context;
 
   @override
   void onInit() {
     super.onInit();
-    // productType.value = Get.arguments[1];
-    // minPrice.value = Get.arguments[2];
-    // maxPrice.value = Get.arguments[3];
-    // rating.value = Get.arguments[4];
-    // sortBy.value = Get.arguments[5];
-    // modelAttribute.value = Get.arguments[6];
-
-    // getMapData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Get.arguments != null) {
+        searchKeyboard.text = Get.arguments[0].toString();
+      }
+      // controller.searchKeyboard.addListener(() {
+      // });
+      getData(
+          searchKeyboard.text,
+          productType.value,
+          minPrice.value,
+          maxPrice.value,
+          rating.value,
+          sortBy.value,
+          modelAttribute.value);
+      if (sortBy.value != '') {
+        isSort.value = true;
+      }
+    });
   }
 
   void getMapData() {
-    getData(searchKeyboard.value, productType.value, minPrice.value,
+    getData(searchKeyboard.text, productType.value, minPrice.value,
         maxPrice.value, rating.value, sortBy.value, modelAttribute.value);
   }
 
@@ -47,7 +59,6 @@ class SearchController extends GetxController {
       mListProducts.clear();
       mListProducts.addAll(value.data!.products);
       model.value = value;
-      return null;
     });
   }
 }

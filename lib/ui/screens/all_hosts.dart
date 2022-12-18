@@ -34,15 +34,28 @@ class AllHostsScreen extends StatelessWidget {
   //   controller.onClose();
   // }
 
+  // void applySearch(BuildContext context) {
+  //   // final controller = Get.put(SearchController());
+  //   if (searchController.text.isEmpty) {
+  //     showToast('Please enter something to search');
+  //   } else {
+  //     FocusManager.instance.primaryFocus?.unfocus();
+  //     Get.offNamed(MyRouter.searchProductScreen,
+  //         arguments: [searchController.text]);
+  //     searchController.clear();
+  //   }
+  // }
+
   void applySearch(BuildContext context) {
     if (searchController.text.isEmpty) {
       showToast('Please enter something to search');
     } else {
+      FocusManager.instance.primaryFocus?.unfocus();
       controller.searchKeyboard.value = searchController.text;
       controller.getDataMap();
       Get.toNamed(MyRouter.searchHostProduct,
           arguments: [searchController.text]);
-      FocusManager.instance.primaryFocus?.unfocus();
+      searchController.clear();
     }
   }
 
@@ -66,7 +79,14 @@ class AllHostsScreen extends StatelessWidget {
                         children: [
                           searchView(context, () {
                             applySearch(context);
-                          }, searchController),
+                          }, searchController,
+                            onSubmitted: (value) {
+                              applySearch(context);
+                            },
+                            onSubmitted1: () {
+                              applySearch(context);
+                            }
+                          ),
                           addHeight(20),
                           Container(
                             height: screenSize.height * 0.18,

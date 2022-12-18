@@ -84,23 +84,11 @@ class SubOrderDetailState extends State<SubOrderDetail>
                                   ),
                                   addHeight(24),
                                   // controller.model.value.data!.suborderData.length!= 0? SizedBox.shrink():
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                      itemCount: controller.model.value.data!.orderData.lineItems.length,
-                                      itemBuilder: (context, index){
-                                          return _getItemAndStatusRowList(index,controller.model.value.data!.orderData);})
-                                        /*_getItemAndStatusRow(
-                                          '${controller.model.value.data!.orderData.lineItems[0].quantity}x ${controller.model.value.data!.orderData.lineItems[0].name}',
-                                          controller.model.value.data!.orderData.paymentMethodTitle.toString(),
-                                          controller.model.value.data!.orderData.lineItems[0].currencySymbol +
-                                          controller.model.value.data!.orderData.lineItems[0].total.toString(),
-                                        ),*/
-                                      ),
-                                    ],
-                                  ),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                  itemCount: controller.model.value.data!.orderData.lineItems.length,
+                                  itemBuilder: (context, index){
+                                    return _getItemAndStatusRowList(index,controller.model.value.data!.orderData);}),
                                 ],
                               ),
                             ),
@@ -139,12 +127,14 @@ class SubOrderDetailState extends State<SubOrderDetail>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: AppTheme.primaryColor,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   Container(
@@ -238,12 +228,14 @@ class SubOrderDetailState extends State<SubOrderDetail>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "${orderData.lineItems![index].quantity}x ${orderData.lineItems[index].name}",
-                    style: const TextStyle(
-                      color: Color(0xff303c5e),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      "${orderData.lineItems[index].quantity}x ${orderData.lineItems[index].name}",
+                      style: const TextStyle(
+                        color: Color(0xff303c5e),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   Text(

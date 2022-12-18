@@ -1,6 +1,4 @@
-import 'package:dinelah/controller/BottomNavController.dart';
 import 'package:dinelah/controller/SearchController.dart';
-import 'package:dinelah/helper/Helpers.dart';
 import 'package:dinelah/models/PopularProduct.dart';
 import 'package:dinelah/repositories/get_update_cart_repository.dart';
 import 'package:dinelah/res/theme/theme.dart';
@@ -28,47 +26,8 @@ class SearchProductState extends State<SearchProduct> {
   int? val = -1;
 
   var indexSortBy = 0;
-  RxBool isSort = false.obs;
 
-  @override
-  void initState() {
-    super.initState();
-    if (Get.arguments != null) {
-      controller.searchKeyboard.value = Get.arguments[0];
-    }
-    searchController.text = controller.searchKeyboard.value;
-    searchController.addListener(() {
-      controller.searchKeyboard.value = searchController.text;
-    });
-    searchController.addListener(() {
-      controller.searchKeyboard.value = searchController.text;
-      controller.mListProducts.clear();
-      // if (searchController.text.isEmpty) {
-      //   controller.mListProducts.clear();
-      //   controller.mListProducts.addAll(controller.model.value.data!.products);
-      // }
-      for (var item in controller.model.value.data!.products) {
-        if (item.name
-                .toLowerCase()
-                .contains(searchController.text.toLowerCase().toString()) ||
-            item.slug
-                .toLowerCase()
-                .contains(searchController.text.toLowerCase())) {
-          controller.mListProducts.add(item);
-        }
-      }
-    });
-    controller.getData(
-        controller.searchKeyboard.value,
-        controller.productType.value,
-        controller.minPrice.value,
-        controller.maxPrice.value,
-        controller.rating.value,
-        controller.sortBy.value,
-        controller.modelAttribute.value);
-  }
-
-  final searchController = TextEditingController();
+  // final searchController = TextEditingController();
   List<String> listSortBy = [
     'Recently Added',
     'Price: Low to High',
@@ -81,11 +40,11 @@ class SearchProductState extends State<SearchProduct> {
   void dispose() {
     super.dispose();
     controller.onClose();
+    controller.searchKeyboard.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    controller.context = context;
     final screenSize = MediaQuery.of(context).size;
     return Container(
       decoration: const BoxDecoration(
@@ -102,9 +61,6 @@ class SearchProductState extends State<SearchProduct> {
         appBar: backAppBar('Search Result'),
         backgroundColor: Colors.transparent,
         body: Obx(() {
-          if (controller.sortBy.value != '') {
-            isSort.value = true;
-          }
           return controller.isDataLoading.value
               ? Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -119,14 +75,30 @@ class SearchProductState extends State<SearchProduct> {
                               child: Row(
                                 children: [
                                   Expanded(
-                                    child: searchView(context, () {
+                                    child: searchView(context,() {
                                       controller.getMapData();
-                                    }, searchController),
+                                    }, controller.searchKeyboard,
+                                        onChanged: (value){
+                                      controller.mListProducts.clear();
+                                      for (var item in controller.model.value.data!.products) {
+                                        if (item.name.toLowerCase().contains(value.toLowerCase().toString()) ||
+                                            item.slug.toLowerCase().contains(value.toLowerCase())) {
+                                          controller.mListProducts.add(item);
+                                        }
+                                      }
+                                    },
+                                      onSubmitted: (value){
+                                        controller.getMapData();
+                                      },
+                                      onSubmitted1: (){
+                                        controller.getMapData();
+                                      },
+                                    ),
                                   ),
                                   filter(() {
                                     Get.toNamed(MyRouter.filterProduct,
                                         arguments: [
-                                          controller.searchKeyboard.value
+                                          controller.searchKeyboard.text
                                         ]);
                                   })
                                 ],
@@ -159,7 +131,7 @@ class SearchProductState extends State<SearchProduct> {
                                         size: 50,
                                         color: Colors.grey[600],
                                       ),
-                                      Text(
+                                      const Text(
                                         'Sort By',
                                         style: TextStyle(
                                             fontSize: 20,
@@ -182,7 +154,7 @@ class SearchProductState extends State<SearchProduct> {
                               );
                             },
                             child: Row(
-                              children: [
+                              children: const [
                                 Text(
                                   'Sort by',
                                   style: TextStyle(
@@ -198,14 +170,17 @@ class SearchProductState extends State<SearchProduct> {
                             ),
                           ),
                           Visibility(
-                            visible: isSort.value,
+                            visible: controller.isSort.value,
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  isSort.value = !isSort.value;
+                                  controller.isSort.value = !controller.isSort.value;
                                   controller.sortBy.value = '';
+                                  if (controller.sortBy.value != '') {
+                                    controller.isSort.value = true;
+                                  }
                                   controller.getData(
-                                      controller.searchKeyboard.value,
+                                      controller.searchKeyboard.text,
                                       controller.productType.value,
                                       controller.minPrice.value,
                                       controller.maxPrice.value,
@@ -226,7 +201,7 @@ class SearchProductState extends State<SearchProduct> {
                                     children: [
                                       Text(controller.sortBy.value.toString()),
                                       addWidth(8),
-                                      Icon(Icons.clear)
+                                      const Icon(Icons.clear)
                                     ],
                                   ),
                                 ),
@@ -253,7 +228,10 @@ class SearchProductState extends State<SearchProduct> {
                     ],
                   ),
                 )
-              : loader(context);
+              : Center(
+              child: CircularProgressIndicator(
+                color: AppTheme.primaryColor,
+              ));
         }),
       ),
     );
@@ -275,7 +253,7 @@ class SearchProductState extends State<SearchProduct> {
   }
 
   Widget orderCard(ModelProduct product) {
-    final CartController _cartController = Get.put(CartController());
+    final CartController cartController = Get.put(CartController());
     // final bottomNavController = Get.put(BottomNavController());
     return GestureDetector(
       onTap: () {
@@ -366,7 +344,7 @@ class SearchProductState extends State<SearchProduct> {
                           child: Html(data: product.price.toString(),
                             style: {
                               "bdi": Style(
-                                fontSize: FontSize(14.0),
+                                fontSize: const FontSize(14.0),
                                 color: AppTheme.primaryColor,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -381,7 +359,7 @@ class SearchProductState extends State<SearchProduct> {
                                   .then((value) {
                                     showToast(value.message);
                                 if (value.status) {
-                                  _cartController.getData();
+                                  cartController.getData();
                                 } else {}
                                 return;
                               });
@@ -438,9 +416,12 @@ class SearchProductState extends State<SearchProduct> {
         setState(() {
           indexSortBy = index;
           controller.sortBy.value = listSortBy[index].toString();
+          if (controller.sortBy.value != '') {
+            controller.isSort.value = true;
+          }
         });
         controller.getData(
-            controller.searchKeyboard.value,
+            controller.searchKeyboard.text,
             controller.productType.value,
             controller.minPrice.value,
             controller.maxPrice.value,

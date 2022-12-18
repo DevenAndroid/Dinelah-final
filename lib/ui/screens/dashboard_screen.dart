@@ -61,7 +61,14 @@ class DashBoardScreenState extends State<DashBoardScreen> {
                         searchView(
                             context, () {
                           applySearch(context);
-                        }, searchController),
+                        }, searchController,
+                          onSubmitted: (value){
+                            applySearch(context);
+                          },
+                          onSubmitted1: (){
+                            applySearch(context);
+                          }
+                        ),
                         addHeight(20),
                         Container(
                           height: screenSize.height * 0.18,
@@ -161,15 +168,15 @@ class DashBoardScreenState extends State<DashBoardScreen> {
   }
 
   void applySearch(BuildContext context) {
-    final controller = Get.put(SearchController());
-    controller.context = context;
+    // final controller = Get.put(SearchController());
     if (searchController.text.isEmpty) {
       showToast('Please enter something to search');
     } else {
-      controller.searchKeyboard.value = searchController.text;
+      FocusManager.instance.primaryFocus?.unfocus();
+      // controller.searchKeyboard.value = searchController.text;
       Get.toNamed(MyRouter.searchProductScreen,
           arguments: [searchController.text]);
-      FocusManager.instance.primaryFocus?.unfocus();
+      searchController.clear();
     }
   }
 

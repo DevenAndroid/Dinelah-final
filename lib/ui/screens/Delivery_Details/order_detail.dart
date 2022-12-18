@@ -61,22 +61,15 @@ class OrderDetailState extends State<OrderDetail>
                       padding: const EdgeInsets.all(10),
                       child: Column(
                         children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _getTitleAndIconRow(
-                                    "OrderId: #${controller.model.value.data!.orderData.id}",
-                                    controller.model.value.data!
-                                        .orderData.dateCreated
-                                        .toString(),
-                                    Icons.calendar_today,
-                                    controller.model.value.data!
-                                        .orderData.status
-                                        .toString()
-//DateFormat("MMM, dd-yyyy").format(order.dateCreated.date),
-                                ),
-                              ),
-                            ],
+                          _getTitleAndIconRow(
+                              "OrderId: #${controller.model.value.data!.orderData.id}",
+                              controller.model.value.data!
+                                  .orderData.dateCreated
+                                  .toString(),
+                              Icons.calendar_today,
+                              controller.model.value.data!
+                                  .orderData.status
+                                  .toString()
                           ),
                           addHeight(24),
                           // ListView.builder(
@@ -84,23 +77,11 @@ class OrderDetailState extends State<OrderDetail>
                           //     itemBuilder: (context, index) {
                           //       return Text('list');
                           //     }),
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: controller.model.value.data!.orderData.lineItems.length,
-                                      itemBuilder: (context, index){
-                                        return _getItemAndStatusRowList(index,controller.model.value.data!.orderData);})
-                                /*_getItemAndStatusRow(
-                                          '${controller.model.value.data!.orderData.lineItems[0].quantity}x ${controller.model.value.data!.orderData.lineItems[0].name}',
-                                          controller.model.value.data!.orderData.paymentMethodTitle.toString(),
-                                          controller.model.value.data!.orderData.lineItems[0].currencySymbol +
-                                          controller.model.value.data!.orderData.lineItems[0].total.toString(),
-                                        ),*/
-                              ),
-                            ],
-                          ),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: controller.model.value.data!.orderData.lineItems.length,
+                              itemBuilder: (context, index){
+                                return _getItemAndStatusRowList(index,controller.model.value.data!.orderData);}),
                         ],
                       ),
                     ),
@@ -188,12 +169,14 @@ class OrderDetailState extends State<OrderDetail>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: AppTheme.primaryColor,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: AppTheme.primaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   Container(
@@ -241,12 +224,14 @@ class OrderDetailState extends State<OrderDetail>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "${orderData.lineItems![index].quantity}x ${orderData.lineItems[index].name}",
-                    style: const TextStyle(
-                      color: Color(0xff303c5e),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      "${orderData.lineItems![index].quantity}x ${orderData.lineItems[index].name}",
+                      style: const TextStyle(
+                        color: Color(0xff303c5e),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   Text(
