@@ -5,12 +5,14 @@ import 'package:dinelah/models/ModelLogIn.dart';
 import 'package:dinelah/routers/my_router.dart';
 import 'package:dinelah/utils/ApiConstant.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../controller/CartController.dart';
+import '../../controller/CustomNavigationBarController.dart';
 import '../../res/app_assets.dart';
 import '../../res/theme/theme.dart';
 import '../widget/common_widget.dart';
@@ -29,24 +31,13 @@ class CheckoutState extends State<Checkout> {
 
   final CartController _cartController = Get.put(CartController());
 
-  getLoadPrefs() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    ModelLogInData? user = ModelLogInData.fromJson(jsonDecode(pref.getString('user')!));
-
-    setState(() {
-      cookie = user.cookie;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    getLoadPrefs();
   }
 
   @override
   Widget build(BuildContext context) {
-    String webUrl = "${"${ApiUrls.domainName}checkout/?cookie=" + cookie}&appchekout=yes";
     return WillPopScope(
       onWillPop: () async {
         _cartController.getData();
@@ -63,42 +54,42 @@ class CheckoutState extends State<Checkout> {
             fit: BoxFit.contain,
           ),
         ),
-        child: Scaffold(
-          appBar: backAppBar("Checkout"),
-          backgroundColor: Colors.transparent,
-          body: Stack(
-            children: [
-              WebView(
-                initialUrl: Uri.parse(webUrl).toString(),
-                javascriptMode: JavascriptMode.unrestricted,
+        child: Obx(() {
+          return Scaffold(
+            appBar: backAppBar("Checkout"),
+            backgroundColor: Colors.transparent,
+            body: Stack(
+              children: [
+                WebView(
+                  initialUrl: Uri.parse(Get.arguments[1]).toString(),
+                  javascriptMode: JavascriptMode.unrestricted,
 
-                onPageFinished: (String url) {
-                  setState(() {
-                    isDataLoad.value = true;
-                  });
-                },
-                // navigationDelegate: (action) {
-                //   print('URL FOUND :: $action');
-                //   if (!action.url.contains('/checkout')) {
-                //     bottomNavController.getData();
-                //     Get.offAllNamed(MyRouter.customBottomBar);
-                //     return NavigationDecision.prevent;
-                //   } else {
-                //     bottomNavController.getData();
-                //     return NavigationDecision.navigate;
-                //   }
-                // },
-              ),
-              !isDataLoad.value
-                  ? const Center(
-                      child: CupertinoActivityIndicator(
-                          animating: true,
-                          color: AppTheme.primaryColor,
-                          radius: 30))
-                  : const SizedBox.shrink()
-            ],
-          ),
-        ),
+                  onPageFinished: (String url) {
+                    setState(() {
+                      isDataLoad.value = true;
+                    });
+                  },
+                  navigationDelegate: (action) {
+                      print('URL FOUND :: $action');
+                    if (!action.url.contains('/checkout')) {
+                      Get.offAllNamed(MyRouter.customBottomBar);
+                      return NavigationDecision.prevent;
+                    } else {
+                      return NavigationDecision.navigate;
+                    }
+                  },
+                ),
+                !isDataLoad.value
+                    ? const Center(
+                    child: CupertinoActivityIndicator(
+                        animating: true,
+                        color: AppTheme.primaryColor,
+                        radius: 30))
+                    : const SizedBox.shrink()
+              ],
+            )
+          );
+        }),
       ),
     );
   }

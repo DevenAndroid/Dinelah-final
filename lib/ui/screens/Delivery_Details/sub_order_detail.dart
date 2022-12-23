@@ -58,6 +58,7 @@ class SubOrderDetailState extends State<SubOrderDetail>
                 : Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -86,6 +87,7 @@ class SubOrderDetailState extends State<SubOrderDetail>
                                   // controller.model.value.data!.suborderData.length!= 0? SizedBox.shrink():
                                   ListView.builder(
                                     shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: controller.model.value.data!.orderData.lineItems.length,
                                   itemBuilder: (context, index){
                                     return _getItemAndStatusRowList(index,controller.model.value.data!.orderData);}),
@@ -96,6 +98,7 @@ class SubOrderDetailState extends State<SubOrderDetail>
                           addHeight(16),
                           ListView.builder(
                               // controller: scrollController,
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: controller.model.value.data!.suborderData.length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {

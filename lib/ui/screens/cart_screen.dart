@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dinelah/controller/BottomNavController.dart';
 import 'package:dinelah/controller/CartController.dart';
 import 'package:dinelah/models/ModelGetCart.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../helper/Helpers.dart';
+import '../../models/ModelLogIn.dart';
 import '../../repositories/get_update_cart_repository.dart';
 import '../../res/app_assets.dart';
 import '../../routers/my_router.dart';
@@ -179,12 +182,16 @@ class CartScreenState extends State<CartScreen> {
                                       buttonWidth: 100,
                                       text: 'Checkout',
                                       onTap: () async {
-                                        SharedPreferences pref = await SharedPreferences
-                                            .getInstance();
+                                        SharedPreferences pref = await SharedPreferences.getInstance();
                                         if (pref.getString('user') != null) {
+                                          ModelLogInData? user =
+                                          ModelLogInData.fromJson(jsonDecode(pref.getString('user')!));
+                                          String webUrl = "${"${ApiUrls.domainName}checkout/?cookie=" +
+                                              user.cookie}&appchekout=yes";
                                           Get.toNamed(MyRouter.checkoutScreen,
                                               arguments: [
                                                 _cartController.model.value.data!.cartmeta.currencySymbol,
+                                                webUrl
                                               ]);
                                         } else {
                                           Get.toNamed(MyRouter.logInScreen);

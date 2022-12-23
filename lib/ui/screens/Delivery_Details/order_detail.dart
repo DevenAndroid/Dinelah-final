@@ -72,13 +72,9 @@ class OrderDetailState extends State<OrderDetail>
                                   .toString()
                           ),
                           addHeight(24),
-                          // ListView.builder(
-                          //     itemCount: 2,
-                          //     itemBuilder: (context, index) {
-                          //       return Text('list');
-                          //     }),
                           ListView.builder(
                               shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: controller.model.value.data!.orderData.lineItems.length,
                               itemBuilder: (context, index){
                                 return _getItemAndStatusRowList(index,controller.model.value.data!.orderData);}),
@@ -226,7 +222,7 @@ class OrderDetailState extends State<OrderDetail>
                 children: [
                   Expanded(
                     child: Text(
-                      "${orderData.lineItems![index].quantity}x ${orderData.lineItems[index].name}",
+                      "${orderData.lineItems[index].quantity}x ${orderData.lineItems[index].name}",
                       style: const TextStyle(
                         color: Color(0xff303c5e),
                         fontSize: 18,
