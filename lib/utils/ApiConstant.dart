@@ -49,8 +49,6 @@ class ApiUrls {
       "${apiBaseUrl}woo_api/search_product";
   static const String getStoreInfoUrl = "${apiBaseUrl}vendor/store_info";
   static const String emailOTPVerifyUrl = "${apiBaseUrl}woocustomer/email_verification";
-
-//  https://dinelah.com/wp-json/api/woocustomer/email_verification
   static const String getWishListUrl =
       '${apiBaseUrl}wishlist/get_wishlist_items';
   static const String addToWishListUrl =

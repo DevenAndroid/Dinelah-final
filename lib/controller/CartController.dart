@@ -17,7 +17,6 @@ class CartController extends GetxController {
     getCartData().then((value) {
       isDataLoading.value = true;
       model.value = value;
-      return null;
     });
   }
 }

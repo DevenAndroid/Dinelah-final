@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:dinelah/controller/BottomNavController.dart';
 import 'package:dinelah/models/ModelLogIn.dart';
-import 'package:dinelah/routers/my_router.dart';
 import 'package:dinelah/utils/ApiConstant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -12,9 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../controller/CartController.dart';
-import '../../controller/CustomNavigationBarController.dart';
 import '../../res/app_assets.dart';
 import '../../res/theme/theme.dart';
+import '../../routers/my_router.dart';
 import '../widget/common_widget.dart';
 
 class Checkout extends StatefulWidget {
@@ -26,16 +24,28 @@ class Checkout extends StatefulWidget {
 
 class CheckoutState extends State<Checkout> {
   var cookie;
+  String webUrl = "";
 
   RxBool isDataLoad = false.obs;
-
+  RxBool isDataLoad1 = false.obs;
   final CartController _cartController = Get.put(CartController());
+
+  getLoadPrefs() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    ModelLogInData? user = ModelLogInData.fromJson(jsonDecode(pref.getString('user')!));
+
+    setState(() {
+      cookie = user.cookie;
+      webUrl = "${"${ApiUrls.domainName}checkout/?cookie=" + cookie}&appchekout=yes";
+      isDataLoad1.value = true;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    getLoadPrefs();
   }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -60,8 +70,9 @@ class CheckoutState extends State<Checkout> {
             backgroundColor: Colors.transparent,
             body: Stack(
               children: [
+                if(isDataLoad1.value)
                 WebView(
-                  initialUrl: Uri.parse(Get.arguments[1]).toString(),
+                  initialUrl: Uri.parse(webUrl).toString(),
                   javascriptMode: JavascriptMode.unrestricted,
 
                   onPageFinished: (String url) {
@@ -70,8 +81,11 @@ class CheckoutState extends State<Checkout> {
                     });
                   },
                   navigationDelegate: (action) {
-                      print('URL FOUND :: $action');
-                    if (!action.url.contains('/checkout')) {
+                      if (kDebugMode) {
+                        print('URL FOUND..........  ${action.url.toString()}');
+                      }
+                    if (action.url.contains('https://dinelah.com/shop/')) {
+                      print('URL FOUND.. ToGoTo.....................  ${action.url.toString()}');
                       Get.offAllNamed(MyRouter.customBottomBar);
                       return NavigationDecision.prevent;
                     } else {
@@ -84,7 +98,9 @@ class CheckoutState extends State<Checkout> {
                     child: CupertinoActivityIndicator(
                         animating: true,
                         color: AppTheme.primaryColor,
-                        radius: 30))
+                        radius: 30
+                    )
+                )
                     : const SizedBox.shrink()
               ],
             )
