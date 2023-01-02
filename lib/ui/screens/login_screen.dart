@@ -583,7 +583,7 @@ class _LoginScreenState extends State<LoginScreen> {
         // showToast(value.message.toString());
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.setString('user', jsonEncode(value1.data));
-        Get.offAndToNamed(MyRouter.customBottomBar);
+        Get.offAllNamed(MyRouter.customBottomBar);
       }
       // else {
       //   // showToast(value.message.toString());
@@ -606,9 +606,7 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var deviceId = prefs.getString('deviceId');
     final value = await FirebaseAuth.instance.signInWithCredential(
-        oAuthCredential).catchError((e) {
-      showToast(e.toString());
-    }).then((value) async {
+        oAuthCredential).then((value) async {
       getSocialLogin(context, value.user!.uid.toString(), "facebook", deviceId,
           value.additionalUserInfo!.profile!["email"],
           await FirebaseMessaging.instance.getToken()).then((value1) async {
@@ -616,9 +614,12 @@ class _LoginScreenState extends State<LoginScreen> {
       if (value1.status) {
       SharedPreferences pref = await SharedPreferences.getInstance();
       pref.setString('user', jsonEncode(value1.data));
-      Get.offAndToNamed(MyRouter.customBottomBar);
+      Get.offAllNamed(MyRouter.customBottomBar);
       }
       });
+    }).catchError((FirebaseAuthException? e){
+      showToast(e.toString());
+      throw Exception(e!.message);
     });
     log("Firebase response.... ${value.toString()}");
     // if (value.user!.email != null) {

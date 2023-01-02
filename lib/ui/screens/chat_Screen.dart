@@ -166,7 +166,10 @@ class ChatterScreenState extends State<ChatterScreen> {
     }
     pushNotification(receiverDetails.id, user.value.user!.displayname.toString(), messageText,
         // (receiverDetails),
-        DeliveryDetail(id: user.value.user!.id.toString(), name: user.value.user!.displayname, image: user.value.user!.avatar, phone: '', address: ''),
+        DeliveryDetail(id: user.value.user!.id.toString(),
+            name: user.value.user!.displayname,
+            image: user.value.user!.avatar,
+            phone: '', address: ''),
         'customer', Get.arguments[3]);
     chatMsgTextController.clear();
   }

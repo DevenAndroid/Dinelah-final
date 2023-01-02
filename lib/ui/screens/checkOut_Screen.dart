@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:dinelah/models/ModelLogIn.dart';
 import 'package:dinelah/utils/ApiConstant.dart';
@@ -32,20 +34,25 @@ class CheckoutState extends State<Checkout> {
 
   getLoadPrefs() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    ModelLogInData? user = ModelLogInData.fromJson(jsonDecode(pref.getString('user')!));
-
-    setState(() {
-      cookie = user.cookie;
-      webUrl = "${"${ApiUrls.domainName}checkout/?cookie=" + cookie}&appchekout=yes";
-      isDataLoad1.value = true;
-    });
+    ModelLogInData? user =
+        ModelLogInData.fromJson(jsonDecode(pref.getString('user')!));
+    webUrl =
+        "${"${ApiUrls.domainName}checkout/?cookie=" + user.cookie}&appchekout=yes";
+    log("Created Web Url.....   $webUrl");
+    print("Created Web Url.....   $webUrl");
+    isDataLoad1.value = true;
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
+    if (Platform.isAndroid) {
+      WebView.platform = SurfaceAndroidWebView();
+    }
     getLoadPrefs();
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -66,45 +73,43 @@ class CheckoutState extends State<Checkout> {
         ),
         child: Obx(() {
           return Scaffold(
-            appBar: backAppBar("Checkout"),
-            backgroundColor: Colors.transparent,
-            body: Stack(
-              children: [
-                if(isDataLoad1.value)
-                WebView(
-                  initialUrl: Uri.parse(webUrl).toString(),
-                  javascriptMode: JavascriptMode.unrestricted,
-
-                  onPageFinished: (String url) {
-                    setState(() {
-                      isDataLoad.value = true;
-                    });
-                  },
-                  navigationDelegate: (action) {
-                      if (kDebugMode) {
-                        print('URL FOUND..........  ${action.url.toString()}');
-                      }
-                    if (action.url.contains('https://dinelah.com/shop/')) {
-                      print('URL FOUND.. ToGoTo.....................  ${action.url.toString()}');
-                      Get.offAllNamed(MyRouter.customBottomBar);
-                      return NavigationDecision.prevent;
-                    } else {
-                      return NavigationDecision.navigate;
-                    }
-                  },
-                ),
-                !isDataLoad.value
-                    ? const Center(
-                    child: CupertinoActivityIndicator(
-                        animating: true,
-                        color: AppTheme.primaryColor,
-                        radius: 30
-                    )
-                )
-                    : const SizedBox.shrink()
-              ],
-            )
-          );
+              appBar: backAppBar("Checkout"),
+              backgroundColor: Colors.transparent,
+              body: Stack(
+                children: [
+                  if (isDataLoad1.value)
+                    WebView(
+                      initialUrl: Uri.parse(webUrl).toString(),
+                      javascriptMode: JavascriptMode.unrestricted,
+                      onPageFinished: (String url) {
+                        setState(() {
+                          isDataLoad.value = true;
+                        });
+                      },
+                      navigationDelegate: (action) {
+                        if (kDebugMode) {
+                          print(
+                              'URL FOUND..........  ${action.url.toString()}');
+                        }
+                        if (action.url.contains('https://dinelah.com/shop/')) {
+                          print(
+                              'URL FOUND.. ToGoTo.....................  ${action.url.toString()}');
+                          Get.offAllNamed(MyRouter.customBottomBar);
+                          return NavigationDecision.prevent;
+                        } else {
+                          return NavigationDecision.navigate;
+                        }
+                      },
+                    ),
+                  !isDataLoad.value
+                      ? const Center(
+                          child: CupertinoActivityIndicator(
+                              animating: true,
+                              color: AppTheme.primaryColor,
+                              radius: 30))
+                      : const SizedBox.shrink()
+                ],
+              ));
         }),
       ),
     );

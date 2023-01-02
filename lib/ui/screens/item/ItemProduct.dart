@@ -73,7 +73,6 @@ class ItemProductState extends State<ItemProduct> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // addHeight(widget.itemHeight / 24),
                 Align(
                   alignment: Alignment.center,
                   child: Hero(
