@@ -97,6 +97,8 @@ class _LoginScreenState extends State<LoginScreen> {
         pref.setString('socialLoginId', value.user!.uid.toString());
         SharedPreferences prefs = await SharedPreferences.getInstance();
         var deviceId = prefs.getString('deviceId');
+
+        print(await FirebaseMessaging.instance.getToken());
         getSocialLogin(context,value.user!.uid.toString(), "apple",deviceId,
             value.user!.email.toString(),
             token
@@ -575,6 +577,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final value = await FirebaseAuth.instance.signInWithCredential(credential);
     log("Firebase response.... ${value.toString()}");
+    print(await FirebaseMessaging.instance.getToken());
     getSocialLogin(context, value.user!.uid.toString(), "google",deviceId,
         value.user!.email.toString(),
         await FirebaseMessaging.instance.getToken()).then((value1) async {
@@ -607,6 +610,7 @@ class _LoginScreenState extends State<LoginScreen> {
     var deviceId = prefs.getString('deviceId');
     final value = await FirebaseAuth.instance.signInWithCredential(
         oAuthCredential).then((value) async {
+          print(await FirebaseMessaging.instance.getToken());
       getSocialLogin(context, value.user!.uid.toString(), "facebook", deviceId,
           value.additionalUserInfo!.profile!["email"],
           await FirebaseMessaging.instance.getToken()).then((value1) async {
